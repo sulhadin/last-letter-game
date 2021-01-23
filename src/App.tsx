@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Greeting from './presenters/Greeting';
+import Play from './presenters/Play';
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const App: React.FC = () => {
         </a>
       </header>
       <Greeting />
+      <Play />
     </div>
   );
 };
