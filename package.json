@@ -4,7 +4,7 @@
   "description": "A word game that the next word must start with the last letter of the previous word.",
   "main": "index.js",
   "repository": "https://github.com/sulhadin/last-letter-game.git",
-  "author": "Sulhadin Öney <sulhadin.oney@optiim.com>",
+  "author": "Sulhadin Öney <sulhadin@gmail.com>",
   "license": "MIT",
   "scripts": {
     "start": "react-scripts start",
