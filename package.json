@@ -1,0 +1,61 @@
+{
+  "name": "last-letter-game",
+  "version": "1.0.0",
+  "description": "A word game that the next word must start with the last letter of the previous word.",
+  "main": "index.js",
+  "repository": "https://github.com/sulhadin/last-letter-game.git",
+  "author": "Sulhadin Öney <sulhadin.oney@optiim.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "format:ts": "prettier --write 'src/**/*.{ts,tsx,md}' && yarn lint:eslint --fix",
+    "lint:eslint": "eslint 'src/**/*.{ts,tsx}'",
+    "format:check": "prettier -c 'src/**/*.{ts,tsx}'",
+    "lint": "yarn lint:eslint",
+    "format": "yarn run format:ts"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "ramda": "^0.27.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-scripts": "4.0.1",
+    "typescript": "^3.9.7",
+    "web-vitals": "^0.2.4"
+  },
+  "devDependencies": {
+    "@atolye15/eslint-config": "^1.2.0",
+    "@testing-library/dom": "^7.29.4",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.53",
+    "@types/react-dom": "^16.9.8",
+    "eslint": "^7.18.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "prettier": "^2.2.1"
+  }
+}
