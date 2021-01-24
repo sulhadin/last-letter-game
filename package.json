@@ -4,18 +4,16 @@
   "description": "A word game that the next word must start with the last letter of the previous word.",
   "main": "index.js",
   "repository": "https://github.com/sulhadin/last-letter-game.git",
-  "author": "Sulhadin Öney <sulhadin@gmail.com>",
+  "author": "sulhadin <sulhadin@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
     "format:ts": "prettier --write 'src/**/*.{ts,tsx,md}' && yarn lint:eslint --fix",
     "lint:eslint": "eslint 'src/**/*.{ts,tsx}'",
     "format:check": "prettier -c 'src/**/*.{ts,tsx}'",
     "lint": "yarn lint:eslint",
-    "format": "yarn run format:ts"
+    "format": "yarn run format:ts",
+    "start": "webpack serve --open --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js"
   },
   "eslintConfig": {
     "extends": [
@@ -36,26 +34,43 @@
     ]
   },
   "dependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "html-webpack-plugin": "^4.5.1",
     "ramda": "^0.27.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-scripts": "4.0.1",
     "typescript": "^3.9.7",
-    "web-vitals": "^0.2.4"
+    "webpack": "^5.17.0",
+    "webpack-merge": "^5.7.3"
   },
   "devDependencies": {
     "@atolye15/eslint-config": "^1.2.0",
-    "@testing-library/dom": "^7.29.4",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
+    "@babel/core": "^7.12.10",
+    "@babel/plugin-transform-runtime": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
+    "@babel/preset-typescript": "^7.12.7",
+    "@babel/runtime": "^7.12.5",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.3",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
+    "@types/webpack": "^4.41.26",
+    "@types/webpack-dev-server": "^3.11.1",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^5.0.1",
     "eslint": "^7.18.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "prettier": "^2.2.1"
+    "node-sass": "^5.0.0",
+    "prettier": "^2.2.1",
+    "sass": "^1.32.5",
+    "sass-loader": "^10.1.1",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^8.0.14",
+    "webpack-cli": "^4.4.0",
+    "webpack-dev-server": "^3.11.2"
   }
 }

@@ -1,10 +1,7 @@
 import React from 'react';
-import InputText from '../components/InputText';
-import List from '../components/List';
-
-const style = {
-  height: 300,
-};
+import InputText from '../../components/InputText';
+import List from '../../components/List';
+import './play.scss';
 
 type IData = {
   item: string;
@@ -18,8 +15,10 @@ const Play: React.FC = () => {
   };
 
   return (
-    <div style={style}>
-      <List data={data} empty="Yet, there is no word said." />
+    <div className="play">
+      <div className="list">
+        <List data={data} empty="Yet, there is no word said." />
+      </div>
       <InputText onEnter={onEnter} placeholder="Enter a word and press enter." />
     </div>
   );

@@ -1,14 +1,12 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 import Greeting from './presenters/Greeting';
-import Play from './presenters/Play';
+import Play from './presenters/play/Play';
 
 const App: React.FC = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>Last letter game</p>
         <a
           className="App-link"

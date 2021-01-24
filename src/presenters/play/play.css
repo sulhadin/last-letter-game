@@ -1,0 +1,9 @@
+.play {
+  height: 1000px;
+}
+.play .list {
+  height: 100px;
+  overflow-y: scroll;
+}
+
+/*# sourceMappingURL=play.css.map */
