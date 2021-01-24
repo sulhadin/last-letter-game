@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface IInputText {
   onEnter: (value: string) => void;
@@ -27,4 +27,4 @@ const InputText: React.FC<IInputText> = ({ onEnter, placeholder }) => {
   );
 };
 
-export default InputText;
+export default memo(InputText);

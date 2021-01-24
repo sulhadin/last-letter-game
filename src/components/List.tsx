@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 
 type IData = {
   item: string;
@@ -10,15 +10,23 @@ interface IList {
 }
 
 const List: React.FC<IList> = ({ data, empty }) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [data]);
+
   if (!data.length) {
     return <p>{empty}</p>;
   }
+
   return (
-    <div className="">
+    <>
       {data.reverse().map(({ item }) => (
         <p key={item}>{item}</p>
       ))}
-    </div>
+      <div ref={messagesEndRef}> </div>
+    </>
   );
 };
 
