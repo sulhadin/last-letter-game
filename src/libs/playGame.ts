@@ -1,8 +1,7 @@
 import words from './data/names.json';
-import { IResponse } from './interfaces';
-import { Payload } from './types';
+import { IResult, IPayload } from './interfaces';
 
-const notFound: IResponse = {
+const notFound: IResult = {
   response: "Sorry, I've lost :(",
   found: false,
 };
@@ -11,7 +10,7 @@ function probability(n: number) {
   return !!n && Math.random() <= n;
 }
 
-const stringSplicer = (fromStart: boolean, length: number) => {
+const splicer = (fromStart: boolean, length: number) => {
   return (word: string) => {
     const startIndex = fromStart ? 0 : word.length - 1;
 
@@ -19,8 +18,8 @@ const stringSplicer = (fromStart: boolean, length: number) => {
   };
 };
 
-function seekAndFind(payload: Payload): IResponse {
-  const formString = stringSplicer(payload.computerFromStart, payload.charLength);
+function seekAndFind(payload: IPayload): IResult {
+  const formString = splicer(payload.computerFromStart, payload.charLength);
 
   const result = words.find((word) => formString(word) === payload.value);
   if (!result) {
@@ -32,7 +31,7 @@ function seekAndFind(payload: Payload): IResponse {
     found: true,
   };
 }
-function computerLogic(payload: Payload): IResponse {
+function computerLogic(payload: IPayload): IResult {
   const shouldFind = probability(payload.probabilityPercent);
 
   if (!shouldFind) {
@@ -42,8 +41,8 @@ function computerLogic(payload: Payload): IResponse {
   return seekAndFind(payload);
 }
 
-function playGame(payload: Payload): IResponse {
-  const formedWord = stringSplicer(payload.playerFromStart, payload.charLength)(payload.value);
+function playGame(payload: IPayload): IResult {
+  const formedWord = splicer(payload.playerFromStart, payload.charLength)(payload.value);
 
   const data = {
     ...payload,

@@ -3,29 +3,22 @@ import InputText from '../../components/InputText';
 import List from '../../components/List';
 import playGame from '../../libs/playGame';
 import './play.scss';
-import { Payload } from '../../libs/types';
-
-type IData = {
-  item: string;
-};
-
-type Dialog = {
-  Player: IData[];
-  Computer: IData[];
-};
+import { IPayload } from '../../libs/interfaces';
+import { Dialog } from '../../libs/types';
 
 const Play: React.FC = () => {
   const [dialog, setDialog] = React.useState<Dialog>({ Player: [], Computer: [] });
 
-  const conf = useMemo<Payload>(
+  const conf = useMemo<IPayload>(
     () => ({
       value: '',
       charLength: 1,
       computerFromStart: true,
       playerFromStart: false,
       probabilityPercent: 1,
+      spoken: [...dialog.Computer, ...dialog.Player],
     }),
-    [],
+    [dialog],
   );
 
   const Player = (value: string) => {

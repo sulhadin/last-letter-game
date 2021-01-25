@@ -1,12 +1,15 @@
-export interface Payload {
-  charLength: number;
-  value: string;
-  computerFromStart: boolean;
-  playerFromStart: boolean;
-  probabilityPercent: number;
-}
+export type Data = {
+  item: string;
+};
 
-// export type Payload = {
+export type Spoken = Data[];
+
+export type Dialog = {
+  Player: Spoken;
+  Computer: Spoken;
+};
+
+// export type IPayload = {
 //   charLength: number;
 //   value: string;
 //   computerFromStart: boolean;
