@@ -6,6 +6,7 @@ import './play.scss';
 import { IPayload } from '../../libs/interfaces';
 import { Spoken } from '../../libs/types';
 import uniqueId from '../../libs/uniqueId';
+import delay from '../../libs/delay';
 
 const configuration = (spoken: Spoken): IPayload => ({
   value: '',
@@ -15,32 +16,27 @@ const configuration = (spoken: Spoken): IPayload => ({
   probabilityPercent: 1,
   spoken,
 });
+const synth = window.speechSynthesis;
 
 const Play: React.FC = () => {
   const [spoken, setSpoken] = React.useState<Spoken>([]);
   const [computerWord, setComputerWord] = React.useState<string | null>(null);
   const [playerWord, setPlayerWord] = React.useState<string | null>(null);
 
-  const test = useCallback(
-    (value: string) => {
-      const answer = playGame({ ...configuration(spoken), value });
-
-      if (answer.found) {
-        Promise.resolve(1)
-          .then(() => setPlayerWord(null))
-          .then(() => setComputerWord(answer.response));
-      } else {
-        console.log(answer.response);
-      }
-    },
-    [spoken],
-  );
-
   const Computer = (value: string) => {
-    setTimeout(() => {
-      // eslint-disable-next-line jest/valid-title
-      test(value);
-    }, 2002);
+    delay(() => {
+      setSpoken((data) => {
+        const answer = playGame({ ...configuration(data), value });
+
+        if (answer.found) {
+          setPlayerWord(null);
+          setComputerWord(answer.response);
+        } else {
+          console.log(answer.response);
+        }
+        return data;
+      });
+    }, [100, 3000]);
   };
 
   useEffect(() => {
@@ -58,14 +54,19 @@ const Play: React.FC = () => {
       Computer(playerWord);
     }
   }, [playerWord]);
+  useEffect(() => {
+    if (computerWord) {
+      const utterThis = new SpeechSynthesisUtterance(computerWord);
+      synth.speak(utterThis);
+    }
+  }, [computerWord]);
 
   console.log('spoken', spoken);
 
   const onEnter = useCallback(
     (value) => {
-      Promise.resolve(1)
-        .then(() => setComputerWord(null))
-        .then(() => setPlayerWord(value));
+      setComputerWord(null);
+      setPlayerWord(value);
     },
     [spoken],
   );
