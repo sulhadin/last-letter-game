@@ -19,9 +19,8 @@
       "error",
       {
         "devDependencies": [
-          "src/setupTests.ts",
           "jest-*.js",
-          "src/**/*.test.tsx",
+          "src/**/*.test.tsx"
         ]
       }
     ],

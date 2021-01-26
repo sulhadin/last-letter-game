@@ -1,11 +1,8 @@
-import React, { useRef, useEffect } from 'react';
-
-type IData = {
-  item: string;
-};
+import React, { useRef, useEffect, memo } from 'react';
+import { Spoken } from '../libs/types';
 
 interface IList {
-  data: IData[];
+  data: Spoken;
   empty: string;
 }
 
@@ -22,12 +19,12 @@ const List: React.FC<IList> = ({ data, empty }) => {
 
   return (
     <>
-      {data.reverse().map(({ item }) => (
-        <p key={item}>{item}</p>
+      {data.reverse().map(({ id, item }) => (
+        <p key={id}>{item}</p>
       ))}
       <div ref={messagesEndRef}> </div>
     </>
   );
 };
 
-export default List;
+export default memo(List);

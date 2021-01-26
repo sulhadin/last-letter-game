@@ -1,8 +1,9 @@
-export type Data = {
+export type Word = {
   item: string;
+  id: string;
 };
 
-export type Spoken = Data[];
+export type Spoken = Word[];
 
 export type Dialog = {
   Player: Spoken;

@@ -1,56 +1,81 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import InputText from '../../components/InputText';
 import List from '../../components/List';
 import playGame from '../../libs/playGame';
 import './play.scss';
 import { IPayload } from '../../libs/interfaces';
-import { Dialog } from '../../libs/types';
+import { Spoken } from '../../libs/types';
+import uniqueId from '../../libs/uniqueId';
+
+const configuration = (spoken: Spoken): IPayload => ({
+  value: '',
+  charLength: 1,
+  computerFromStart: true,
+  playerFromStart: false,
+  probabilityPercent: 1,
+  spoken,
+});
 
 const Play: React.FC = () => {
-  const [dialog, setDialog] = React.useState<Dialog>({ Player: [], Computer: [] });
+  const [spoken, setSpoken] = React.useState<Spoken>([]);
+  const [computerWord, setComputerWord] = React.useState<string | null>(null);
+  const [playerWord, setPlayerWord] = React.useState<string | null>(null);
 
-  const conf = useMemo<IPayload>(
-    () => ({
-      value: '',
-      charLength: 1,
-      computerFromStart: true,
-      playerFromStart: false,
-      probabilityPercent: 1,
-      spoken: [...dialog.Computer, ...dialog.Player],
-    }),
-    [dialog],
+  const test = useCallback(
+    (value: string) => {
+      const answer = playGame({ ...configuration(spoken), value });
+
+      if (answer.found) {
+        Promise.resolve(1)
+          .then(() => setPlayerWord(null))
+          .then(() => setComputerWord(answer.response));
+      } else {
+        console.log(answer.response);
+      }
+    },
+    [spoken],
   );
 
-  const Player = (value: string) => {
-    setDialog((data) => ({
-      Computer: data.Computer,
-      Player: data.Player.concat({ item: value }),
-    }));
-  };
-
   const Computer = (value: string) => {
-    const answer = playGame({ ...conf, value });
-
-    setDialog((data) => ({
-      Computer: data.Computer.concat({ item: answer.response }),
-      Player: data.Player,
-    }));
+    setTimeout(() => {
+      // eslint-disable-next-line jest/valid-title
+      test(value);
+    }, 2002);
   };
+
+  useEffect(() => {
+    if (computerWord || playerWord) {
+      const item = playerWord ?? computerWord;
+
+      if (item) {
+        setSpoken(spoken.concat({ item, id: uniqueId() }));
+      }
+    }
+  }, [computerWord, playerWord]);
+
+  useEffect(() => {
+    if (playerWord) {
+      Computer(playerWord);
+    }
+  }, [playerWord]);
+
+  console.log('spoken', spoken);
 
   const onEnter = useCallback(
-    (value: string) => {
-      Player(value);
-      Computer(value);
+    (value) => {
+      Promise.resolve(1)
+        .then(() => setComputerWord(null))
+        .then(() => setPlayerWord(value));
     },
-    [dialog],
+    [spoken],
   );
 
   return (
     <div className="play">
       <div className="list">
-        <List data={dialog.Player} empty="Yet, there is no word said." />
-        <List data={dialog.Computer} empty="Yet, there is no word said." />
+        <List data={spoken} empty="Yet, there is no word said." />
       </div>
+      <h1>{computerWord ?? playerWord}</h1>
       <InputText onEnter={onEnter} placeholder="Enter a word and press enter." />
     </div>
   );
