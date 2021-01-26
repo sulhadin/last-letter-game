@@ -21,7 +21,16 @@ const splicer = (fromStart: boolean, length: number) => {
 function seekAndFind(payload: IPayload): IResult {
   const formString = splicer(payload.computerFromStart, payload.charLength);
 
-  const result = words.find((word) => formString(word) === payload.value);
+  console.log('payload.spoken', payload.spoken);
+  const result = words.find((word) => {
+    if (payload.spoken.length > 0) {
+      return formString(word) === payload.value && payload.spoken.some(({ item }) => item !== word);
+    }
+
+    return formString(word) === payload.value;
+  });
+
+  console.log('result', payload.spoken, result);
   if (!result) {
     return notFound;
   }
