@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import InputText from '../../components/InputText';
-import List from '../../components/List';
+import InputText from '../components/InputText';
+import List from '../components/List';
 import playGame from '../../libs/playGame';
 import './play.scss';
 import { Spoken } from '../../libs/types';

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, memo } from 'react';
-import { Spoken } from '../libs/types';
+import { Spoken } from '../../libs/types';
 
 interface IList {
   data: Spoken;

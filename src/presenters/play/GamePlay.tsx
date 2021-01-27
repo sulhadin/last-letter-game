@@ -1,14 +1,14 @@
 import React, { memo, useCallback, useEffect, useMemo } from 'react';
-import InputText from '../../components/InputText';
-import List from '../../components/List';
+import List from '../components/List';
 import './play.scss';
 import { Spoken, Word } from '../../libs/types';
 import uniqueId from '../../libs/uniqueId';
-import WordViewer from '../../components/WordViewer';
+import WordViewer from '../components/WordViewer';
 import { PlayerEnum, nextPlayer, defaultPlayer } from '../../libs/Players';
 import lastArrayItem from '../../libs/utils';
 import delay from '../../libs/delay';
 import playGame from '../../libs/playGame';
+import InputWord from '../components/InputWord';
 
 const GamePlay: React.FC = () => {
   const [spoken, setSpoken] = React.useState<Spoken>([]);
@@ -56,7 +56,6 @@ const GamePlay: React.FC = () => {
     }
   }, [player]);
 
-  console.log({ spoken });
   return (
     <div className="play">
       <WordViewer prefix="Last word is" word={lastSpoken?.item} />
@@ -64,51 +63,9 @@ const GamePlay: React.FC = () => {
         <List data={spoken} empty="Yet, there is no word said." />
       </div>
       <h2>{`It is now ${PlayerEnum[player]}'s turn`}</h2>
-      <InputText onEnter={callback} placeholder="Enter a word and press enter." />
+      <InputWord player={player} callback={callback} placeholder="Please say some word!" />
     </div>
   );
 };
 
 export default memo(GamePlay);
-
-// const [computerWord, setComputerWord] = React.useState<string | null>(null);
-// const [playerWord, setPlayerWord] = React.useState<string | null>(null);
-
-// const Computer = (value: string) => {
-//   delay(() => {
-//     setSpoken((data) => {
-//       const answer = playGame({ ...configuration(data), value });
-//
-//       if (answer.found) {
-//         setPlayerWord(null);
-//         setComputerWord(answer.response);
-//       } else {
-//         console.log(answer.response);
-//       }
-//       return data;
-//     });
-//   }, [100, 3000]);
-// };
-//
-// useEffect(() => {
-//   if (computerWord || playerWord) {
-//     const item = playerWord ?? computerWord;
-//
-//     if (item) {
-//       setSpoken(spoken.concat({ item, id: uniqueId() }));
-//     }
-//   }
-// }, [computerWord, playerWord]);
-//
-// useEffect(() => {
-//   if (playerWord) {
-//     Computer(playerWord);
-//   }
-// }, [playerWord]);
-//
-// useEffect(() => {
-//   if (computerWord) {
-//     TextToSpeech(computerWord);
-//     SpeechToText();
-//   }
-// }, [computerWord]);
