@@ -1,5 +1,8 @@
 import words from './data/names.json';
 import { IResult, IPayload } from './interfaces';
+import configuration from './configuration';
+import { Spoken, Word } from './types';
+import lastArrayItem from './utils';
 
 const notFound: IResult = {
   response: "Sorry, I've lost :(",
@@ -50,11 +53,13 @@ function computerLogic(payload: IPayload): IResult {
   return seekAndFind(payload);
 }
 
-function playGame(payload: IPayload): IResult {
-  const formedWord = splicer(payload.playerFromStart, payload.charLength)(payload.value);
+function playGame(spoken: Spoken): IResult {
+  const value = lastArrayItem<Word>(spoken);
+  const formedWord = splicer(configuration.playerFromStart, configuration.charLength)(value.item);
 
   const data = {
-    ...payload,
+    ...configuration,
+    spoken,
     value: formedWord,
   };
 
