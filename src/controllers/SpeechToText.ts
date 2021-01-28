@@ -1,16 +1,17 @@
 declare global {
   interface Window {
     webkitSpeechRecognition: unknown;
-    webkitSpeechGrammarList: unknown;
+    SpeechRecognition: new () => SpeechRecognition;
   }
 }
 
-const { webkitSpeechRecognition, webkitSpeechGrammarList }: Window = window as Window;
+let { SpeechRecognition } = window as Window;
+const { webkitSpeechRecognition } = window as Window;
 
-const SR = SpeechRecognition || webkitSpeechRecognition;
-const SG = SpeechGrammarList || webkitSpeechGrammarList;
+SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+// const SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
 
-const recognition = new SR();
+const recognition = new SpeechRecognition();
 
 function TextToSpeech(computerWord: string): void {
   const synth = window.speechSynthesis;
@@ -18,12 +19,13 @@ function TextToSpeech(computerWord: string): void {
   synth.speak(utterThis);
 }
 
-function SpeechToText(lang: string, gr: [string] | [] = []): () => void {
-  const grammar = `#JSGF V1.0; grammar words; public <color> = ${gr.join(' | ')} ;`;
+function SpeechToText(lang: string): () => void {
+  // , gr: [string] | [] = []
+  // const grammar = `#JSGF V1.0; grammar words; public <color> = ${gr.join(' | ')} ;`;
 
-  const speechRecognitionList = new SG();
-  speechRecognitionList.addFromString(grammar, 1);
-  recognition.grammars = speechRecognitionList;
+  // const speechRecognitionList = new SpeechGrammarList();
+  // speechRecognitionList.addFromString(grammar, 1);
+  // recognition.grammars = speechRecognitionList;
   recognition.continuous = false;
   recognition.lang = lang;
   recognition.interimResults = false;
