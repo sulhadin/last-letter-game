@@ -1,4 +1,5 @@
 import { Spoken } from './types';
+import { PlayerEnum } from './Players';
 
 export interface IResult {
   response: string;
@@ -12,4 +13,10 @@ export interface IPayload {
   computerFromStart: boolean;
   playerFromStart: boolean;
   spoken: Spoken;
+}
+
+export interface IInput {
+  callback(value: string): void;
+  placeholder: string;
+  player: PlayerEnum;
 }

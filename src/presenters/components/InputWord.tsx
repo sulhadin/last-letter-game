@@ -1,18 +1,12 @@
 import React, { memo } from 'react';
 import InputText from './InputText';
 import InputVoice from './InputVoice';
-import { PlayerEnum } from '../../libs/Players';
+import { IInput } from '../../libs/interfaces';
 
-interface IInputText {
-  callback(value: string): void;
-  placeholder: string;
-  player: PlayerEnum;
-}
-
-const InputWord: React.FC<IInputText> = ({ callback, placeholder, player }) => {
+const InputWord: React.FC<IInput> = ({ callback, placeholder, player }) => {
   return (
     <div className="">
-      <InputText onEnter={callback} placeholder={placeholder} />
+      <InputText callback={callback} placeholder={placeholder} player={player} />
       <InputVoice callback={callback} placeholder={placeholder} player={player} />
     </div>
   );

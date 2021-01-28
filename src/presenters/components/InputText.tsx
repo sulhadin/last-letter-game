@@ -1,16 +1,19 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
+import { IInput } from '../../libs/interfaces';
+import { PlayerEnum } from '../../libs/Players';
 
-interface IInputText {
-  onEnter: (value: string) => void;
-  placeholder: string;
-}
+const InputText: React.FC<IInput> = ({ callback, placeholder, player }) => {
+  const [inputValue, setValue] = React.useState<string>('');
+  const [wait, setWait] = React.useState<boolean>(false);
 
-const InputText: React.FC<IInputText> = ({ onEnter, placeholder }) => {
-  const [inputValue, setValue] = React.useState('');
+  useEffect(() => {
+    const shouldWait = player !== PlayerEnum.Player;
+    setWait(shouldWait);
+  }, [player]);
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
     if (event.key === 'Enter') {
-      onEnter(inputValue);
+      callback(inputValue);
       setValue('');
     }
   };
@@ -22,6 +25,7 @@ const InputText: React.FC<IInputText> = ({ onEnter, placeholder }) => {
         onChange={(e) => setValue(e.target.value)}
         onKeyPress={onKeyDown}
         placeholder={placeholder}
+        disabled={wait}
       />
     </div>
   );

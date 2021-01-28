@@ -1,29 +1,22 @@
 import React, { memo, useEffect } from 'react';
 import { SpeechToText } from '../../controllers/SpeechToText';
-import names from '../../libs/data/names.json';
 import { PlayerEnum } from '../../libs/Players';
+import { IInput } from '../../libs/interfaces';
 
-interface IInputText {
-  callback: (value: string) => void;
-  placeholder: string;
-  player: PlayerEnum;
-}
 const start = SpeechToText('tr');
 
-const InputVoice: React.FC<IInputText> = ({ callback, placeholder, player }) => {
-  const listen = (e) => {
+const InputVoice: React.FC<IInput> = ({ callback, placeholder, player }) => {
+  const listen = (e: CustomEvent): void => {
     callback(e.detail.result);
   };
 
   useEffect(() => {
     if (player === PlayerEnum.Player) {
-      console.log('my turn');
-
       start();
     }
-    document.addEventListener('speechEvent', listen);
+    document.addEventListener('speechEvent', listen as EventListener);
     return () => {
-      document.removeEventListener('speechEvent', listen);
+      document.removeEventListener('speechEvent', listen as EventListener);
     };
   }, [player]);
 
