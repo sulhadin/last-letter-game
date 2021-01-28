@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import InputText from './InputText';
-import InputVoice from './InputVoice';
+import InputVoice from './InputVoice/InputVoice';
 import { IInput } from '../../libs/interfaces';
 
 const InputWord: React.FC<IInput> = ({ callback, placeholder, player }) => {

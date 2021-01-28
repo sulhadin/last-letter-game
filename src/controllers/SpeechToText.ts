@@ -1,3 +1,5 @@
+import { Interface } from 'readline';
+
 declare global {
   interface Window {
     webkitSpeechRecognition: unknown;
@@ -12,33 +14,34 @@ SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
 // const SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
 
 const recognition = new SpeechRecognition();
+recognition.continuous = false;
+recognition.interimResults = false;
+recognition.maxAlternatives = 1;
 
-function TextToSpeech(computerWord: string): void {
-  const synth = window.speechSynthesis;
-  const utterThis = new SpeechSynthesisUtterance(computerWord);
-  synth.speak(utterThis);
+interface ISpeechToTextResult {
+  stop: () => void;
+  start: () => void;
 }
 
-function SpeechToText(lang: string): () => void {
+export default function SpeechToText(lang: string): ISpeechToTextResult {
   // , gr: [string] | [] = []
   // const grammar = `#JSGF V1.0; grammar words; public <color> = ${gr.join(' | ')} ;`;
 
   // const speechRecognitionList = new SpeechGrammarList();
   // speechRecognitionList.addFromString(grammar, 1);
   // recognition.grammars = speechRecognitionList;
-  recognition.continuous = false;
-  recognition.lang = lang;
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
 
-  return () => {
-    recognition.start();
+  recognition.lang = lang;
+
+  return {
+    stop: () => recognition.stop(),
+    start: () => recognition.start(),
   };
 }
 
 recognition.onresult = (event: SpeechRecognitionEvent) => {
   document.dispatchEvent(
-    new CustomEvent('speechEvent', {
+    new CustomEvent('speechResultEvent', {
       detail: { result: event.results[0][0].transcript },
     }),
   );
@@ -46,10 +49,18 @@ recognition.onresult = (event: SpeechRecognitionEvent) => {
 
 recognition.onspeechend = () => {
   recognition.stop();
+  document.dispatchEvent(
+    new CustomEvent('speechStopEvent', {
+      detail: { result: 'stopped' },
+    }),
+  );
 };
 
 recognition.onerror = () => {
   recognition.stop();
+  document.dispatchEvent(
+    new CustomEvent('speechStopEvent', {
+      detail: { result: 'stopped' },
+    }),
+  );
 };
-
-export { TextToSpeech, SpeechToText };
