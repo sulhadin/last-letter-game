@@ -1,14 +1,14 @@
 import React, { memo, useCallback, useEffect, useMemo } from 'react';
-import List from '../components/List';
+import List from '../components/List/List';
 import './play.scss';
 import { Spoken, Word } from '../../libs/types';
 import uniqueId from '../../libs/uniqueId';
-import WordViewer from '../components/WordViewer';
+import WordViewer from '../components/WordViewer/WordViewer';
 import { PlayerEnum, nextPlayer, defaultPlayer } from '../../libs/Players';
 import lastArrayItem from '../../libs/utils';
 import delay from '../../libs/delay';
 import playGame from '../../libs/playGame';
-import InputWord from '../components/InputWord';
+import InputWord from '../components/InputWord/InputWord';
 import useCountDown from '../components/hooks/useCountDown';
 
 const GamePlay: React.FC = () => {
@@ -60,14 +60,14 @@ const GamePlay: React.FC = () => {
   }, [player]);
 
   return (
-    <div className="play">
+    <div className="game-play">
       <WordViewer prefix="Last word is" word={lastSpoken?.item} />
       <WordViewer word={timer.toString()} />
+      <h2>{`It is now ${PlayerEnum[player]}'s turn`}</h2>
+      <InputWord player={player} callback={callback} placeholder="Please say some word!" />
       <div className="list">
         <List data={spoken} empty="Yet, there is no word said." />
       </div>
-      <h2>{`It is now ${PlayerEnum[player]}'s turn`}</h2>
-      <InputWord player={player} callback={callback} placeholder="Please say some word!" />
     </div>
   );
 };

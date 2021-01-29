@@ -4,7 +4,7 @@ import GamePlay from './presenters/play/GamePlay';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
+    <div className="last-letter-game-app">
       <GamePlay />
     </div>
   );

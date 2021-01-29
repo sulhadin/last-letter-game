@@ -1,6 +1,7 @@
 import React, { memo, useEffect } from 'react';
-import { IInput } from '../../libs/interfaces';
-import { PlayerEnum } from '../../libs/Players';
+import { IInput } from '../../../libs/interfaces';
+import { PlayerEnum } from '../../../libs/Players';
+import './style.scss';
 
 const InputText: React.FC<IInput> = ({ callback, placeholder, player }) => {
   const [inputValue, setValue] = React.useState<string>('');
@@ -11,7 +12,7 @@ const InputText: React.FC<IInput> = ({ callback, placeholder, player }) => {
     setWait(shouldWait);
   }, [player]);
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+  const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>): void => {
     if (event.key === 'Enter') {
       callback(inputValue);
       setValue('');
@@ -19,11 +20,15 @@ const InputText: React.FC<IInput> = ({ callback, placeholder, player }) => {
   };
 
   return (
-    <div className="">
+    <div className="form-group">
+      <span>Say it!</span>
       <input
+        ref={(inputRef) => inputRef && inputRef.focus()}
+        className="text-field"
+        type="text"
         value={inputValue}
         onChange={(e) => setValue(e.target.value)}
-        onKeyPress={onKeyDown}
+        onKeyPress={onKeyPress}
         placeholder={placeholder}
         disabled={wait}
       />
