@@ -66,7 +66,7 @@ const GamePlay: React.FC = () => {
       <h2>{`It is now ${PlayerEnum[player]}'s turn`}</h2>
       <InputWord player={player} callback={callback} placeholder="Please say some word!" />
       <div className="list">
-        <List data={spoken} empty="Yet, there is no word said." />
+        <List data={spoken} empty="Word list is empty." title="Word chain" />
       </div>
     </div>
   );

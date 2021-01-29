@@ -5,22 +5,22 @@ import './style.scss';
 interface IList {
   data: Spoken;
   empty: string;
+  title: string;
 }
 
-const List: React.FC<IList> = ({ data, empty }) => {
+const List: React.FC<IList> = ({ data, title, empty }) => {
   if (!data.length) {
     return <p>{empty}</p>;
   }
 
   return (
     <div className="list-area">
-      <div>
-        {data.reverse().map(({ id, item }, i) => (
-          <div key={id} className={`text ${i % 2 === 0 ? 'R' : 'L'}`}>
-            {item}
-          </div>
-        ))}
-      </div>
+      <h3>{title}</h3>
+      {data.reverse().map(({ id, item }, i) => (
+        <div key={id} className={`text ${i % 2 === 0 ? 'R' : 'L'}`}>
+          {item}
+        </div>
+      ))}
     </div>
   );
 };
