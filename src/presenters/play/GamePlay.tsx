@@ -9,10 +9,12 @@ import lastArrayItem from '../../libs/utils';
 import delay from '../../libs/delay';
 import playGame from '../../libs/playGame';
 import InputWord from '../components/InputWord';
+import useCountDown from '../components/hooks/useCountDown';
 
 const GamePlay: React.FC = () => {
   const [spoken, setSpoken] = React.useState<Spoken>([]);
   const [player, setPlayer] = React.useState<PlayerEnum>(defaultPlayer);
+  const [timer, restart] = useCountDown(8);
 
   const lastSpoken = useMemo(() => lastArrayItem<Word>(spoken), [spoken]);
 
@@ -53,12 +55,14 @@ const GamePlay: React.FC = () => {
   useEffect(() => {
     if (spoken.length) {
       actions[player](spoken);
+      restart();
     }
   }, [player]);
 
   return (
     <div className="play">
       <WordViewer prefix="Last word is" word={lastSpoken?.item} />
+      <WordViewer word={timer.toString()} />
       <div className="list">
         <List data={spoken} empty="Yet, there is no word said." />
       </div>
