@@ -1,34 +1,35 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 
-export type CountDown = [number, () => void];
+export type CountDown = [number, () => void, boolean];
 
 const useCountDown = (seconds: number): CountDown => {
-  const [countDown, setCountDown] = React.useState<number>(seconds);
+  const [isActive, setIsActive] = useState(false);
+  const [isTimeout, setIsTimeout] = useState(false);
+  const [counter, setCounter] = useState(seconds);
 
-  const setupTimer = () => {
-    const countDownTimer = setInterval(() => {
-      let remain = 0;
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
 
-      setCountDown((second) => {
-        remain = second;
-        return second - 1;
-      });
-      console.log('remain', remain);
-      console.log('countDownTimer', countDownTimer);
-      if (remain <= 1) {
-        console.log('remain', remain);
-        clearInterval(countDownTimer);
-        console.log('countDownTimer clear', countDownTimer);
-      }
-    }, 1000);
-  };
+    if (isActive) {
+      intervalId = setInterval(() => {
+        if (counter <= 1) {
+          setIsActive(false);
+          setIsTimeout(true);
+        }
+        setCounter((count) => count - 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(intervalId);
+  }, [isActive, counter]);
 
   const restart = () => {
-    setCountDown(seconds);
-    setupTimer();
+    setIsTimeout(false);
+    setIsActive(true);
+    setCounter(seconds);
   };
-  React.useEffect(restart, []);
-  return [countDown, restart];
+
+  return [counter, restart, isTimeout];
 };
 
 export default useCountDown;
