@@ -3,7 +3,7 @@ import { IInput } from '../../../libs/interfaces';
 import { PlayerEnum } from '../../../libs/Players';
 import './style.scss';
 
-const InputText: React.FC<IInput> = ({ callback, placeholder, player }) => {
+const InputText: React.FC<IInput> = ({ onNewWord, placeholder, player }) => {
   const [inputValue, setValue] = React.useState<string>('');
   const [wait, setWait] = React.useState<boolean>(false);
 
@@ -14,7 +14,7 @@ const InputText: React.FC<IInput> = ({ callback, placeholder, player }) => {
 
   const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>): void => {
     if (event.key === 'Enter') {
-      callback(inputValue);
+      onNewWord(inputValue);
       setValue('');
     }
   };

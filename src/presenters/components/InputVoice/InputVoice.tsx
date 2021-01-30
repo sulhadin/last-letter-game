@@ -17,7 +17,7 @@ const microphone = {
   [MicrophoneEnum.Unmute]: unmute,
 };
 
-const InputVoice: React.FC<IInput> = ({ callback, placeholder, player }) => {
+const InputVoice: React.FC<IInput> = ({ onNewWord, placeholder, player }) => {
   const [muteState, setMuteState] = useState<MicrophoneEnum>(MicrophoneEnum.Unmute);
   const [speech, speechStopped] = useSpeechListener(true);
 
@@ -61,7 +61,7 @@ const InputVoice: React.FC<IInput> = ({ callback, placeholder, player }) => {
   useEffect(() => {
     if (speechStopped && speech) {
       console.log('speech', speech);
-      callback(speech);
+      onNewWord(speech);
     }
     if (speechStopped) {
       setMuteState(MicrophoneEnum.Mute);

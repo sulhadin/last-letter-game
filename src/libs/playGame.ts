@@ -43,6 +43,7 @@ function seekAndFind(payload: IPayload): IResult {
     found: true,
   };
 }
+
 function computerLogic(payload: IPayload): IResult {
   const shouldFind = probability(payload.probabilityPercent);
 

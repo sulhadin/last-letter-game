@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useContext, useEffect, useMemo } from 'react';
-import InputText from '../InputText/InputText';
-import InputVoice from '../InputVoice/InputVoice';
+import InputText from '../../components/InputText/InputText';
+import InputVoice from '../../components/InputVoice/InputVoice';
 import { IInput } from '../../../libs/interfaces';
 import { GameContext } from '../../../context/GameContext';
 import uniqueId from '../../../libs/uniqueId';
@@ -9,7 +9,7 @@ import { Spoken } from '../../../libs/types';
 import delay from '../../../libs/delay';
 import playGame from '../../../libs/playGame';
 
-const InputManager: React.FC<IInput> = ({ callback, placeholder, player }) => {
+const InputWord: React.FC<IInput> = ({ onNewWord, placeholder, player }) => {
   const { state: spoken, setState: setSpoken } = useContext(GameContext);
 
   console.log('player', player);
@@ -25,8 +25,7 @@ const InputManager: React.FC<IInput> = ({ callback, placeholder, player }) => {
 
           if (answer.found) {
             addWord(answer.response);
-            console.log('callback call');
-            callback();
+            onNewWord();
           } else {
             // TODO: Computer lost.
           }
@@ -51,7 +50,7 @@ const InputManager: React.FC<IInput> = ({ callback, placeholder, player }) => {
     (value) => {
       console.log('value', value);
       addWord(value);
-      callback();
+      onNewWord();
     },
     [spoken],
   );
@@ -60,10 +59,10 @@ const InputManager: React.FC<IInput> = ({ callback, placeholder, player }) => {
 
   return (
     <>
-      <InputText callback={inputCallback} placeholder={placeholder} player={player} />
-      <InputVoice callback={inputCallback} placeholder={placeholder} player={player} />
+      <InputText onNewWord={inputCallback} placeholder={placeholder} player={player} />
+      <InputVoice onNewWord={inputCallback} placeholder={placeholder} player={player} />
     </>
   );
 };
 
-export default memo(InputManager);
+export default memo(InputWord);

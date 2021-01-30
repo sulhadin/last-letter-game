@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
-import App from './App';
+import App from './presenters/gamePlay/App';
+import GameProvider from './context/GameProvider';
 
 if (module.hot) {
   module.hot.accept(() => {
@@ -11,7 +12,9 @@ if (module.hot) {
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <GameProvider>
+      <App />
+    </GameProvider>
   </React.StrictMode>,
   document.getElementById('root'),
 );
