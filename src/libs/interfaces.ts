@@ -16,7 +16,7 @@ export interface IPayload {
 }
 
 export interface IInput {
-  callback(value: string): void;
+  callback(value?: string): void;
   placeholder: string;
   player: PlayerEnum;
 }

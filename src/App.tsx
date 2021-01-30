@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 import './App.scss';
-import GamePlay from './presenters/play/GamePlay';
-import GameContext from './context/GameContext';
-import { PlayerEnum } from './libs/Players';
+import GamePlay from './presenters/play/GameManager';
+import { GameContext } from './context/GameContext';
 import { Spoken } from './libs/types';
 
-type State = {
-  spoken: Spoken;
-  player: PlayerEnum;
-};
+const initialState: [] = [];
+
 const App: React.FC = () => {
-  const [state, setState] = useState<State>({ spoken: [], player: PlayerEnum.Player });
+  const [state, setState] = useState<Spoken>(initialState);
 
   return (
     <div className="last-letter-game-app">
-      <GameContext.Provider value={[state, setState]}>
+      <GameContext.Provider value={{ state, setState }}>
         <GamePlay />
       </GameContext.Provider>
     </div>

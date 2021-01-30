@@ -1,11 +1,10 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import SpeechToText from '../../../controllers/SpeechToText';
 import { PlayerEnum } from '../../../libs/Players';
 import { IInput } from '../../../libs/interfaces';
 import mute from '../../../assets/mute.png';
 import unmute from '../../../assets/unmute.png';
-
-const speechToText = SpeechToText('tr');
+import useSpeechListener from '../hooks/useSpeechListener';
 
 // eslint-disable-next-line no-shadow
 enum MicrophoneEnum {
@@ -19,41 +18,67 @@ const microphone = {
 };
 
 const InputVoice: React.FC<IInput> = ({ callback, placeholder, player }) => {
-  const [state, setState] = useState<MicrophoneEnum>(MicrophoneEnum.Unmute);
+  const [muteState, setMuteState] = useState<MicrophoneEnum>(MicrophoneEnum.Unmute);
+  const [speech, speechStopped] = useSpeechListener(true);
 
-  const listenResult = (e: CustomEvent): void => {
-    callback(e.detail.result);
+  const speechToText = useMemo(() => SpeechToText('tr'), []);
+
+  const startStopSpeechRecognition = (isStart: boolean): void => {
+    if (isStart) {
+      speechToText.start();
+      setMuteState(MicrophoneEnum.Unmute);
+    } else {
+      speechToText.stop();
+      setMuteState(MicrophoneEnum.Mute);
+    }
   };
-  const listenStop = (): void => {
-    setState(MicrophoneEnum.Mute);
-  };
+
+  const changePlayTurnMap = useMemo(
+    () => ({
+      [PlayerEnum.Player]: () => {
+        startStopSpeechRecognition(true);
+      },
+      [PlayerEnum.Computer]: () => {
+        startStopSpeechRecognition(false);
+      },
+    }),
+    [startStopSpeechRecognition],
+  );
+
+  const changeSpeechStateMap = useMemo(
+    () => ({
+      [MicrophoneEnum.Mute]: () => {
+        startStopSpeechRecognition(true);
+      },
+      [MicrophoneEnum.Unmute]: () => {
+        speechToText.stop();
+        startStopSpeechRecognition(false);
+      },
+    }),
+    [],
+  );
 
   useEffect(() => {
-    if (player === PlayerEnum.Player) {
-      speechToText.start();
-      setState(MicrophoneEnum.Unmute);
+    if (speechStopped && speech) {
+      console.log('speech', speech);
+      callback(speech);
     }
-    document.addEventListener('speechStopEvent', listenStop as EventListener);
-    document.addEventListener('speechResultEvent', listenResult as EventListener);
-    return () => {
-      document.removeEventListener('speechStopEvent', listenStop as EventListener);
-      document.removeEventListener('speechResultEvent', listenResult as EventListener);
-    };
+    if (speechStopped) {
+      setMuteState(MicrophoneEnum.Mute);
+    }
+  }, [speech, speechStopped]);
+
+  useEffect(() => {
+    changePlayTurnMap[player]();
   }, [player]);
 
   const onClick = () => {
-    if (state === MicrophoneEnum.Mute) {
-      speechToText.start();
-      setState(MicrophoneEnum.Unmute);
-    } else {
-      speechToText.stop();
-      setState(MicrophoneEnum.Mute);
-    }
+    changeSpeechStateMap[muteState]();
   };
 
   return (
     <div className="input-voice">
-      <img src={microphone[state]} key={state} width={100} alt="mute" onClick={onClick} />
+      <img src={microphone[muteState]} key={muteState} width={100} alt="mute" onClick={onClick} />
       <div>{placeholder}</div>
     </div>
   );

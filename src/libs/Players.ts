@@ -6,8 +6,8 @@ enum PlayerEnum {
 
 const defaultPlayer: PlayerEnum = PlayerEnum.Player;
 
-const nextPlayer = (player: PlayerEnum): PlayerEnum => {
-  switch (player) {
+const nextPlayer = (currentPlayer: PlayerEnum): PlayerEnum => {
+  switch (currentPlayer) {
     case PlayerEnum.Computer: {
       return PlayerEnum.Player;
     }

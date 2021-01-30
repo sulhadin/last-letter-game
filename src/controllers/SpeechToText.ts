@@ -47,7 +47,7 @@ recognition.onresult = (event: SpeechRecognitionEvent) => {
 
 recognition.onspeechend = () => {
   recognition.stop();
-
+  console.log('onspeechend');
   document.dispatchEvent(
     new CustomEvent('speechStopEvent', {
       detail: { result: 'stopped' },
