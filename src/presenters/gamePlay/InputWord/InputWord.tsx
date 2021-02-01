@@ -7,12 +7,11 @@ import uniqueId from '../../../libs/uniqueId';
 import { PlayerEnum } from '../../../libs/Players';
 import { Spoken } from '../../../libs/types';
 import delay from '../../../libs/delay';
-import playGame from '../../../libs/playGame';
+import { playGame } from '../../../libs/playGame';
 
 const InputWord: React.FC<IInput> = ({ onNewWord, placeholder, player }) => {
   const { state: spoken, setState: setSpoken } = useContext(GameContext);
 
-  console.log('player', player);
   const addWord = (value: string): void => {
     setSpoken((prev: Spoken) => prev.concat({ item: value, id: uniqueId() }));
   };

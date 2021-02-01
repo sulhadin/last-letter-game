@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 export type CountDown = [number, () => void, boolean];
 
 const useCountDown = (seconds: number): CountDown => {
-  const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState(true);
   const [isTimeout, setIsTimeout] = useState(false);
   const [counter, setCounter] = useState(seconds);
 

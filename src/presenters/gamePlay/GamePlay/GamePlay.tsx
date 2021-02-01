@@ -6,12 +6,14 @@ import { defaultPlayer, nextPlayer, PlayerEnum } from '../../../libs/Players';
 import lastArrayItem from '../../../libs/utils';
 import InputWord from '../InputWord/InputWord';
 import useCountDown from '../../components/hooks/useCountDown';
-import { GameContext } from '../../../context/GameContext';
 import './style.scss';
+import { GameContext } from '../../../context/GameContext';
 
-const GamePlay: React.FC = () => {
+interface IGamePlay {
+  gameStarted: boolean;
+}
+const GamePlay: React.FC<IGamePlay> = () => {
   const { state: spoken } = useContext(GameContext);
-
   const [player, setPlayer] = React.useState<PlayerEnum>(defaultPlayer);
   const [timer, restart, timeIsUp] = useCountDown(8);
 

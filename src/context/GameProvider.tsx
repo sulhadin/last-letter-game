@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { Spoken } from '../libs/types';
-import { GameContext } from './GameContext';
+import React, { useReducer } from 'react';
+import { AppContext, gameReducer, initialState } from './reducers';
 
 const GameProvider: React.FC = ({ children }) => {
-  const [state, setState] = useState<Spoken>([]);
+  const [state, dispatch] = useReducer(gameReducer, initialState);
 
-  return <GameContext.Provider value={{ state, setState }}>{children}</GameContext.Provider>;
+  return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>;
 };
 
 export default GameProvider;

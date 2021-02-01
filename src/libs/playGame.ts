@@ -3,11 +3,9 @@ import { IResult, IPayload } from './interfaces';
 import configuration from './configuration';
 import { Spoken, Word } from './types';
 import lastArrayItem from './utils';
+import randomize from './randomize';
 
-const notFound: IResult = {
-  response: "Sorry, I've lost :(",
-  found: false,
-};
+const lostMessage = "Sorry, I've lost :(";
 
 function probability(n: number) {
   return !!n && Math.random() <= n;
@@ -20,6 +18,18 @@ const splicer = (fromStart: boolean, length: number) => {
     return word.substr(startIndex, length);
   };
 };
+
+function resultFormatter(word: string, found = true): IResult {
+  return {
+    response: word,
+    found,
+  };
+}
+
+function getRandomWord(): IResult {
+  const index = randomize(0, words.length - 1);
+  return resultFormatter(words[index]);
+}
 
 function seekAndFind(payload: IPayload): IResult {
   const formString = splicer(payload.computerFromStart, payload.charLength);
@@ -35,28 +45,21 @@ function seekAndFind(payload: IPayload): IResult {
   });
 
   if (!result) {
-    return notFound;
+    return resultFormatter(lostMessage, false);
   }
 
-  return {
-    response: result,
-    found: true,
-  };
-}
-
-function computerLogic(payload: IPayload): IResult {
-  const shouldFind = probability(payload.probabilityPercent);
-
-  if (!shouldFind) {
-    return notFound;
-  }
-
-  return seekAndFind(payload);
+  return resultFormatter(result);
 }
 
 function playGame(spoken: Spoken): IResult {
   const value = lastArrayItem<Word>(spoken);
   const formedWord = splicer(configuration.playerFromStart, configuration.charLength)(value.item);
+
+  const shouldFind = probability(configuration.probabilityPercent);
+
+  if (!shouldFind) {
+    return resultFormatter(lostMessage, false);
+  }
 
   const data = {
     ...configuration,
@@ -64,7 +67,7 @@ function playGame(spoken: Spoken): IResult {
     value: formedWord,
   };
 
-  return computerLogic(data);
+  return seekAndFind(data);
 }
 
-export default playGame;
+export { playGame, getRandomWord };
