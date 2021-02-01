@@ -1,6 +1,6 @@
 import React, { createContext } from 'react';
 
-type ActionMap<M extends { [index: string]: any }> = {
+type TActionMap<M extends { [index: string]: any }> = {
   [Key in keyof M]: M[Key] extends undefined
     ? {
         type: Key;
@@ -11,24 +11,31 @@ type ActionMap<M extends { [index: string]: any }> = {
       };
 };
 
-type InitialStateType = {
-  player: { [player: string]: [string] };
-  currentPlayer: string;
+type TInitialState = {
+  game: { [player: string]: string[] };
+  players: { [player: string]: string };
+  currentPlayer: string | null;
 };
 
-const initialState = {
-  player: {},
-  currentPlayer: '87fhaf8',
+const initialState: TInitialState = {
+  game: {},
+  players: {},
+  currentPlayer: null,
 };
 
-export type PlayerActions = ActionMap<InitialStateType>[keyof ActionMap<InitialStateType>];
+export type TPlayerActions = TActionMap<TInitialState>[keyof TActionMap<TInitialState>];
 
-export const gameReducer = (state = initialState, action: PlayerActions): InitialStateType => {
+const gameReducer = (state = initialState, action: TPlayerActions): TInitialState => {
   switch (action.type) {
-    case 'player':
+    case 'game':
       return {
         ...state,
-        player: action.payload,
+        game: action.payload,
+      };
+    case 'players':
+      return {
+        ...state,
+        players: action.payload,
       };
     case 'currentPlayer':
       return {
@@ -40,16 +47,12 @@ export const gameReducer = (state = initialState, action: PlayerActions): Initia
   }
 };
 
-const mainReducer = (state: InitialStateType, action: PlayerActions) => ({
-  gameReducer: gameReducer(state, action),
-});
-
 const AppContext = createContext<{
-  state: InitialStateType;
+  state: TInitialState;
   dispatch: React.Dispatch<any>;
 }>({
   state: initialState,
   dispatch: () => null,
 });
 
-export { AppContext, mainReducer, initialState };
+export { AppContext, gameReducer, initialState };

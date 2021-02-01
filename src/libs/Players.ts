@@ -1,22 +1,25 @@
-// eslint-disable-next-line no-shadow
-enum PlayerEnum {
-  Player,
-  Computer,
-}
+const playerComputer = 'Computer';
 
-const defaultPlayer: PlayerEnum = PlayerEnum.Player;
+const nextPlayer = (
+  currentPlayer: string | null,
+  players: { [player: string]: string },
+): string => {
+  const keys = Object.keys(players);
 
-const nextPlayer = (currentPlayer: PlayerEnum): PlayerEnum => {
-  switch (currentPlayer) {
-    case PlayerEnum.Computer: {
-      return PlayerEnum.Player;
-    }
-    case PlayerEnum.Player: {
-      return PlayerEnum.Computer;
-    }
-    default:
-      return defaultPlayer;
+  console.log({ currentPlayer, players, first: keys[0] });
+
+  if (!currentPlayer) {
+    return keys[0];
   }
+  const currentIndex = keys.findIndex((player) => player === currentPlayer);
+
+  const nextItem = keys[currentIndex + 1];
+
+  if (nextItem) {
+    return nextItem;
+  }
+
+  return keys[0];
 };
 
-export { PlayerEnum, nextPlayer, defaultPlayer };
+export { nextPlayer, playerComputer };

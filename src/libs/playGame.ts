@@ -1,8 +1,5 @@
 import words from './data/names.json';
 import { IResult, IPayload } from './interfaces';
-import configuration from './configuration';
-import { Spoken, Word } from './types';
-import lastArrayItem from './utils';
 import randomize from './randomize';
 
 const lostMessage = "Sorry, I've lost :(";
@@ -11,12 +8,9 @@ function probability(n: number) {
   return !!n && Math.random() <= n;
 }
 
-const splicer = (fromStart: boolean, length: number) => {
-  return (word: string) => {
-    const startIndex = fromStart ? 0 : word.length - 1;
-
-    return word.substr(startIndex, length);
-  };
+const splicer = (word: string, length: number, fromEnd: boolean) => {
+  const startIndex = fromEnd ? word.length - 1 : 0;
+  return word.substr(startIndex, length);
 };
 
 function resultFormatter(word: string, found = true): IResult {
@@ -31,18 +25,10 @@ function getRandomWord(): IResult {
   return resultFormatter(words[index]);
 }
 
-function seekAndFind(payload: IPayload): IResult {
-  const formString = splicer(payload.computerFromStart, payload.charLength);
-
-  const result = words.find((word) => {
-    if (payload.spoken.length > 0) {
-      return (
-        formString(word) === payload.value && !payload.spoken.some(({ item }) => item === word)
-      );
-    }
-
-    return formString(word) === payload.value;
-  });
+function restrictedSeekAndFind(payload: IPayload): IResult {
+  const result = words.find(
+    (word) => word.startsWith(payload.letters) && !payload.spoken?.includes(word),
+  );
 
   if (!result) {
     return resultFormatter(lostMessage, false);
@@ -51,23 +37,46 @@ function seekAndFind(payload: IPayload): IResult {
   return resultFormatter(result);
 }
 
-function playGame(spoken: Spoken): IResult {
-  const value = lastArrayItem<Word>(spoken);
-  const formedWord = splicer(configuration.playerFromStart, configuration.charLength)(value.item);
+function seekAndFind(payload: IPayload): IResult {
+  const result = words.find((word) => word.startsWith(payload.letters));
 
-  const shouldFind = probability(configuration.probabilityPercent);
+  if (!result) {
+    return resultFormatter(lostMessage, false);
+  }
+
+  return resultFormatter(result);
+}
+
+function probabilityLogic(probabilityPercent: number): IResult {
+  const shouldFind = probability(probabilityPercent);
 
   if (!shouldFind) {
     return resultFormatter(lostMessage, false);
   }
 
-  const data = {
-    ...configuration,
-    spoken,
-    value: formedWord,
+  return resultFormatter('', true);
+}
+
+function playGame(word: string, spoken?: string[]): IResult {
+  const conf = {
+    charLength: 1,
+    lettersFromEnd: true, // Also can get letters from beginning to make the game more interesting.
+    probabilityPercent: 1,
+    restricted: true,
   };
 
-  return seekAndFind(data);
+  const result = probabilityLogic(conf.probabilityPercent);
+  if (!result.found) {
+    return result;
+  }
+
+  const letters = splicer(word, conf.charLength, conf.lettersFromEnd);
+
+  if (conf.restricted || spoken?.length === 0) {
+    return restrictedSeekAndFind({ letters });
+  }
+
+  return seekAndFind({ letters, spoken });
 }
 
 export { playGame, getRandomWord };

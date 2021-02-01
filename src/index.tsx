@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
-import App from './presenters/gamePlay/App';
+import App from './presenters/game/App';
 import GameProvider from './context/GameProvider';
 
 if (module.hot) {
