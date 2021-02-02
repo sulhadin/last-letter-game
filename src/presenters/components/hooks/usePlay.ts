@@ -24,6 +24,7 @@ const usePlay = (): TUsePlay => {
     setGameOver(computerLost);
   }, [computerLost]);
 
+  // TODO: Will be custom hook.
   const play = useCallback(() => {
     delay(() => {
       const answer = getRandomWord();

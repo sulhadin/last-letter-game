@@ -6,16 +6,12 @@ import useCountDown from '../../components/hooks/useCountDown';
 import usePlay from '../../components/hooks/usePlay';
 import './style.scss';
 
-interface IGamePlay {
-  gameStarted: boolean;
-}
-const GamePlay: React.FC<IGamePlay> = () => {
+const GamePlay: React.FC = () => {
   const { gameOver, setGameOver, lastWord, currentPlayer, addWord } = usePlay();
   const [timer, restart, timeIsUp] = useCountDown(8);
 
   useEffect(() => {
     if (timeIsUp) {
-      // TODO: Time is up setup here.
       setGameOver('Time is up!');
     }
   }, [timeIsUp]);

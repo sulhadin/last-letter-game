@@ -11,4 +11,5 @@ export interface IPayload {
 export interface IInput {
   onNewWord(value?: string): void;
   placeholder: string;
+  disabled?: boolean;
 }

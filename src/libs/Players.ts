@@ -6,8 +6,6 @@ const nextPlayer = (
 ): string => {
   const keys = Object.keys(players);
 
-  console.log({ currentPlayer, players, first: keys[0] });
-
   if (!currentPlayer) {
     return keys[0];
   }
