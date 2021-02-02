@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, useCallback } from 'react';
 import { AppContext } from '../../../context/reducers';
 import { playGame } from '../../../libs/playGame';
 import delay from '../../../libs/delay';
+import TextToSpeech from '../../../controllers/TextToSpeech';
 
 type IUseComputerPlayResult = {
   computerLost: string;
@@ -14,22 +15,31 @@ const useComputerPlay = (
   const { state } = useContext(AppContext);
   const [computerLost, setComputerLost] = useState<string>('');
 
-  const play = useCallback(() => {
-    delay(() => {
-      const words = Object.values(state.game).flat();
-      const answer = playGame(lastWord, words);
+  const readAnswer = (response: string) => {
+    const speak = TextToSpeech(response);
+    speak();
+  };
 
-      if (answer.found) {
-        addWord(answer.response);
-      } else {
-        setComputerLost(answer.response);
-      }
-    }, [100, 3000]);
-  }, [state.currentPlayer]);
+  const play = useCallback(
+    (words: string[]) => {
+      delay(() => {
+        const answer = playGame(lastWord, words, state.preferences);
+        readAnswer(answer.response);
+
+        if (answer.found) {
+          addWord(answer.response);
+        } else {
+          setComputerLost(answer.response);
+        }
+      }, [100, 3000]);
+    },
+    [state.currentPlayer],
+  );
 
   useEffect(() => {
     if (state.currentPlayer && state.players[state.currentPlayer] === 'Computer') {
-      play();
+      const words = Object.values(state.game).flat();
+      play(words);
     }
   }, [state.currentPlayer]);
 

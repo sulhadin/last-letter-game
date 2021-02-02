@@ -15,14 +15,17 @@ type TUsePlay = {
 };
 const usePlay = (): TUsePlay => {
   const { state } = useContext(AppContext);
-
   const [gameOver, setGameOver] = useState<string>('');
-  const { lastWord, addWord } = useGamePlay();
+  const { notValidMessage, lastWord, addWord } = useGamePlay();
   const { computerLost } = useComputerPlay(lastWord, addWord);
 
   useEffect(() => {
     setGameOver(computerLost);
   }, [computerLost]);
+
+  useEffect(() => {
+    setGameOver(notValidMessage);
+  }, [notValidMessage]);
 
   // TODO: Will be custom hook.
   const play = useCallback(() => {

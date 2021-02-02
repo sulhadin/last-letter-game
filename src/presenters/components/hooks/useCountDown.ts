@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export type CountDown = [number, () => void, boolean];
+export type CountDown = [number, boolean, () => void, (value: boolean) => void];
 
 const useCountDown = (seconds: number): CountDown => {
   const [isActive, setIsActive] = useState(true);
@@ -29,7 +29,7 @@ const useCountDown = (seconds: number): CountDown => {
     setCounter(seconds);
   };
 
-  return [counter, restart, isTimeout];
+  return [counter, isTimeout, restart, setIsActive];
 };
 
 export default useCountDown;

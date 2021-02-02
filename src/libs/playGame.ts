@@ -1,6 +1,7 @@
 import words from './data/names.json';
 import { IResult, IPayload } from './interfaces';
 import randomize from './randomize';
+import { TPreferences } from './types';
 
 const lostMessage = "Sorry, I've lost :(";
 
@@ -57,26 +58,29 @@ function probabilityLogic(probabilityPercent: number): IResult {
   return resultFormatter('', true);
 }
 
-function playGame(word: string, spoken?: string[]): IResult {
-  const conf = {
-    charLength: 1,
-    lettersFromEnd: true, // Also can get letters from beginning to make the game more interesting.
-    probabilityPercent: 1,
-    restricted: true,
-  };
-
-  const result = probabilityLogic(conf.probabilityPercent);
+function playGame(word: string, spoken: string[], preferences: TPreferences): IResult {
+  const result = probabilityLogic(preferences.probabilityPercent);
   if (!result.found) {
     return result;
   }
 
-  const letters = splicer(word, conf.charLength, conf.lettersFromEnd);
+  const letters = splicer(word, preferences.charLength, preferences.letterFromEnd);
 
-  if (conf.restricted || spoken?.length === 0) {
-    return restrictedSeekAndFind({ letters });
+  if (preferences.restricted || spoken?.length === 0) {
+    return restrictedSeekAndFind({ letters, spoken });
   }
 
-  return seekAndFind({ letters, spoken });
+  return seekAndFind({ letters });
 }
 
-export { playGame, getRandomWord };
+function checkWord(
+  prevWord: string,
+  word: string,
+  charLength: number,
+  lettersFromEnd: boolean,
+): boolean {
+  const letters = splicer(prevWord, charLength, lettersFromEnd);
+  return word.startsWith(letters);
+}
+
+export { playGame, getRandomWord, checkWord };

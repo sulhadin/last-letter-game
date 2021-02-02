@@ -1,8 +1,11 @@
 import { useState, useEffect, useContext, useRef, useCallback } from 'react';
 import { AppContext } from '../../../context/reducers';
 import { nextPlayer } from '../../../libs/Players';
+import { checkWord } from '../../../libs/playGame';
+import userType from '../../../libs/userType';
 
 export type IUseGamePlay = {
+  notValidMessage: string;
   lastWord: string;
   addWord: (value: string) => void;
 };
@@ -10,6 +13,7 @@ export type IUseGamePlay = {
 const useGamePlay = (): IUseGamePlay => {
   const { state, dispatch } = useContext(AppContext);
   const [lastWord, setLastWord] = useState<string>('');
+  const [notValidMessage, setNotValidMessage] = useState<string>('');
   const resolveRef = useRef<(value: string) => void>();
 
   const switchPlayer = useCallback(() => {
@@ -17,9 +21,26 @@ const useGamePlay = (): IUseGamePlay => {
     dispatch({ type: 'currentPlayer', payload: player });
   }, [state]);
 
+  function isWordValid(newWord: string) {
+    const isValid = checkWord(
+      lastWord,
+      newWord,
+      state.preferences.charLength,
+      state.preferences.letterFromEnd,
+    );
+
+    if (!isValid) {
+      const user = userType(state.currentPlayer, state.players);
+      setNotValidMessage(`${user} lost.`);
+    }
+    return isValid;
+  }
+
   const addWord = (word: string) => {
-    resolveRef?.current?.(word);
-    setLastWord(word);
+    if (isWordValid(word)) {
+      resolveRef?.current?.(word);
+      setLastWord(word);
+    }
   };
 
   const saveWord = useCallback(
@@ -53,7 +74,7 @@ const useGamePlay = (): IUseGamePlay => {
       .finally(() => switchPlayer());
   }, [state.currentPlayer]);
 
-  return { lastWord, addWord };
+  return { notValidMessage, lastWord, addWord };
 };
 
 export default useGamePlay;

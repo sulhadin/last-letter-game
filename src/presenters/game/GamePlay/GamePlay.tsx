@@ -8,7 +8,7 @@ import './style.scss';
 
 const GamePlay: React.FC = () => {
   const { gameOver, setGameOver, lastWord, currentPlayer, addWord } = usePlay();
-  const [timer, restart, timeIsUp] = useCountDown(8);
+  const [timer, timeIsUp, restart, setIsActive] = useCountDown(8);
 
   useEffect(() => {
     if (timeIsUp) {
@@ -19,6 +19,11 @@ const GamePlay: React.FC = () => {
   useEffect(() => {
     restart();
   }, [currentPlayer]);
+
+  useEffect(() => {
+    // TODO: Finish panel should appear.
+    setIsActive(false);
+  }, [gameOver]);
 
   return (
     <div className="game-play">
