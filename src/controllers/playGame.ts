@@ -1,15 +1,14 @@
-import words from './data/names.json';
-import { IResult, IPayload } from './interfaces';
-import randomize from './randomize';
-import { TPreferences } from './types';
+import words from '../libs/data/names.json';
+import { IResult, IPayload, TPreferences } from '../libs/types';
+import randomize from '../libs/randomize';
 
 const lostMessage = "Sorry, I've lost :(";
 
-function probability(n: number) {
+function probability(n: number): boolean {
   return !!n && Math.random() <= n;
 }
 
-const splicer = (word: string, length: number, fromEnd: boolean) => {
+const splicer = (word: string, length: number, fromEnd: boolean): string => {
   const startIndex = fromEnd ? word.length - 1 : 0;
   return word.substr(startIndex, length);
 };

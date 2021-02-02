@@ -6,7 +6,7 @@ interface IWordViewer {
   prefix?: string;
 }
 
-const WordViewer: React.FC<IWordViewer> = ({ prefix, word }) => {
+const TextViewer: React.FC<IWordViewer> = ({ prefix, word }) => {
   if (!word) {
     return (
       <>
@@ -23,4 +23,4 @@ const WordViewer: React.FC<IWordViewer> = ({ prefix, word }) => {
   );
 };
 
-export default memo(WordViewer);
+export default memo(TextViewer);

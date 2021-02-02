@@ -9,7 +9,6 @@ let { SpeechRecognition } = window as Window;
 const { webkitSpeechRecognition } = window as Window;
 
 SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
-// const SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
 
 const recognition = new SpeechRecognition();
 recognition.continuous = false;
@@ -22,12 +21,18 @@ interface ISpeechToTextResult {
 }
 
 export default function SpeechToText(lang: string): ISpeechToTextResult {
-  // , gr: [string] | [] = []
-  // const grammar = `#JSGF V1.0; grammar words; public <color> = ${gr.join(' | ')} ;`;
+  // I haven't used grammar implementation here since I did not need it.
+  // Can be implemented in the future.
+
+  //* ********************************
+  // const SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+  // grammar: [string] | [] = []
+  // const grammar = `#JSGF V1.0; grammar somethings; public <someTag> = ${grammar.join(' | ')} ;`;
 
   // const speechRecognitionList = new SpeechGrammarList();
   // speechRecognitionList.addFromString(grammar, 1);
   // recognition.grammars = speechRecognitionList;
+  //* ********************************
 
   recognition.lang = lang;
 
@@ -47,7 +52,7 @@ recognition.onresult = (event: SpeechRecognitionEvent) => {
 
 recognition.onspeechend = () => {
   recognition.stop();
-  console.log('onspeechend');
+
   document.dispatchEvent(
     new CustomEvent('speechStopEvent', {
       detail: { result: 'stopped' },
@@ -57,6 +62,7 @@ recognition.onspeechend = () => {
 
 recognition.onerror = () => {
   recognition.stop();
+
   document.dispatchEvent(
     new CustomEvent('speechStopEvent', {
       detail: { result: 'stopped' },

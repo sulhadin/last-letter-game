@@ -1,9 +1,9 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
-import SpeechToText from '../../../controllers/SpeechToText';
-import { IInput } from '../../../libs/interfaces';
+import SpeechToText from '../../../controllers/speechToText';
+import { IInput } from '../../../libs/types';
 import mute from '../../../assets/mute.png';
 import unmute from '../../../assets/unmute.png';
-import useSpeechListener from '../hooks/useSpeechListener';
+import useSpeechListener from '../../../hooks/useSpeechListener';
 
 // eslint-disable-next-line no-shadow
 enum MicEnum {

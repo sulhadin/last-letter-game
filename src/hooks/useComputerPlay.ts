@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
-import { AppContext } from '../../../context/reducers';
-import { playGame } from '../../../libs/playGame';
-import delay from '../../../libs/delay';
-import TextToSpeech from '../../../controllers/TextToSpeech';
+import GameContext from '../context/GameContext';
+import { playGame } from '../controllers/playGame';
+import delay from '../libs/delay';
+import textToSpeech from '../controllers/textToSpeech';
 
 type IUseComputerPlayResult = {
   computerLost: string;
@@ -12,11 +12,11 @@ const useComputerPlay = (
   lastWord: string,
   addWord: (value: string) => void,
 ): IUseComputerPlayResult => {
-  const { state } = useContext(AppContext);
+  const { state } = useContext(GameContext);
   const [computerLost, setComputerLost] = useState<string>('');
 
   const readAnswer = (response: string) => {
-    const speak = TextToSpeech(response);
+    const speak = textToSpeech(response);
     speak();
   };
 

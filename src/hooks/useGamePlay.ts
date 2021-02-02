@@ -1,8 +1,9 @@
 import { useState, useEffect, useContext, useRef, useCallback } from 'react';
-import { AppContext } from '../../../context/reducers';
-import { nextPlayer } from '../../../libs/Players';
-import { checkWord } from '../../../libs/playGame';
-import userType from '../../../libs/userType';
+import GameContext from '../context/GameContext';
+import { nextPlayer } from './helpers/nextPlayer';
+import { checkWord } from '../controllers/playGame';
+import userType from './helpers/userType';
+import { setCurrentPlayerAction } from '../store/actions';
 
 export type IUseGamePlay = {
   notValidMessage: string;
@@ -11,7 +12,11 @@ export type IUseGamePlay = {
 };
 
 const useGamePlay = (): IUseGamePlay => {
-  const { state, dispatch } = useContext(AppContext);
+  const { state, dispatch } = useContext(GameContext);
+
+  // Test it.
+  const setCurrentPlayer = setCurrentPlayerAction(dispatch);
+
   const [lastWord, setLastWord] = useState<string>('');
   const [notValidMessage, setNotValidMessage] = useState<string>('');
   const resolveRef = useRef<(value: string) => void>();
@@ -19,6 +24,9 @@ const useGamePlay = (): IUseGamePlay => {
   const switchPlayer = useCallback(() => {
     const player = nextPlayer(state.currentPlayer, state.players);
     dispatch({ type: 'currentPlayer', payload: player });
+
+    // Test it.
+    setCurrentPlayer(player);
   }, [state]);
 
   function isWordValid(newWord: string) {

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { AppContext } from '../../../context/reducers';
+import GameContext from '../../../context/GameContext';
 import { TPreferences } from '../../../libs/types';
 
 interface IGamePreferences {
@@ -7,7 +7,7 @@ interface IGamePreferences {
 }
 
 const GamePreferences: React.FC<IGamePreferences> = ({ setStartGame }) => {
-  const { state, dispatch } = useContext(AppContext);
+  const { state, dispatch } = useContext(GameContext);
 
   const [formValues, setFormValues] = useState<TPreferences>(state.preferences);
 

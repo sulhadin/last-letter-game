@@ -1,9 +1,9 @@
 import React, { memo, useEffect } from 'react';
-import List from '../../components/List/List';
-import WordViewer from '../../components/WordViewer/WordViewer';
-import InputWord from '../InputWord/InputWord';
-import useCountDown from '../../components/hooks/useCountDown';
-import usePlay from '../../components/hooks/usePlay';
+import List from '../../components/list/List';
+import WordViewer from '../../components/textViewer/TextViewer';
+import InputWord from '../inputs/Inputs';
+import useCountDown from '../../../hooks/useCountDown';
+import usePlay from '../../../hooks/usePlay';
 import './style.scss';
 
 const GamePlay: React.FC = () => {

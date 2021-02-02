@@ -1,10 +1,10 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { AppContext } from '../../../context/reducers';
+import GameContext from '../context/GameContext';
 import useGamePlay from './useGamePlay';
 import useComputerPlay from './useComputerPlay';
-import delay from '../../../libs/delay';
-import { getRandomWord } from '../../../libs/playGame';
-import userType from '../../../libs/userType';
+import delay from '../libs/delay';
+import { getRandomWord } from '../controllers/playGame';
+import userType from './helpers/userType';
 
 type TUsePlay = {
   gameOver: string;
@@ -14,7 +14,7 @@ type TUsePlay = {
   currentPlayer: string | null;
 };
 const usePlay = (): TUsePlay => {
-  const { state } = useContext(AppContext);
+  const { state } = useContext(GameContext);
   const [gameOver, setGameOver] = useState<string>('');
   const { notValidMessage, lastWord, addWord } = useGamePlay();
   const { computerLost } = useComputerPlay(lastWord, addWord);

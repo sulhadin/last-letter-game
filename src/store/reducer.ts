@@ -1,24 +1,4 @@
-import React, { createContext } from 'react';
-import { TPreferences } from '../libs/types';
-
-type TActionMap<M extends { [index: string]: any }> = {
-  [Key in keyof M]: M[Key] extends undefined
-    ? {
-        type: Key;
-      }
-    : {
-        type: Key;
-        payload: M[Key];
-      };
-};
-
-type TInitialState = {
-  game: { [player: string]: string[] };
-  players: { [player: string]: string };
-  currentPlayer: string | null;
-  currentUser: string | null;
-  preferences: TPreferences;
-};
+import { TInitialState, TPlayerActions } from './types';
 
 const initialState: TInitialState = {
   game: {},
@@ -33,8 +13,6 @@ const initialState: TInitialState = {
     inputType: 'TEXT',
   },
 };
-
-export type TPlayerActions = TActionMap<TInitialState>[keyof TActionMap<TInitialState>];
 
 const gameReducer = (state = initialState, action: TPlayerActions): TInitialState => {
   switch (action.type) {
@@ -68,12 +46,4 @@ const gameReducer = (state = initialState, action: TPlayerActions): TInitialStat
   }
 };
 
-const AppContext = createContext<{
-  state: TInitialState;
-  dispatch: React.Dispatch<any>;
-}>({
-  state: initialState,
-  dispatch: () => null,
-});
-
-export { AppContext, gameReducer, initialState };
+export { gameReducer, initialState };

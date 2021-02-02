@@ -1,11 +1,11 @@
 import React, { memo, useContext, useEffect, useMemo } from 'react';
-import InputText from '../../components/InputText/InputText';
-import InputVoice from '../../components/InputVoice/InputVoice';
-import { AppContext } from '../../../context/reducers';
-import { IInput } from '../../../libs/interfaces';
+import InputText from '../../components/inputText/InputText';
+import InputVoice from '../../components/inputVoice/InputVoice';
+import GameContext from '../../../context/GameContext';
+import { IInput } from '../../../libs/types';
 
-const InputWord: React.FC<IInput> = ({ onNewWord, placeholder }) => {
-  const { state } = useContext(AppContext);
+const Inputs: React.FC<IInput> = ({ onNewWord, placeholder }) => {
+  const { state } = useContext(GameContext);
   const [disabled, setDisabled] = React.useState<boolean>(false);
 
   useEffect(() => {
@@ -27,4 +27,4 @@ const InputWord: React.FC<IInput> = ({ onNewWord, placeholder }) => {
   return InputComponent[state.preferences.inputType]();
 };
 
-export default memo(InputWord);
+export default memo(Inputs);

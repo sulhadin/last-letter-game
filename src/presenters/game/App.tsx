@@ -1,13 +1,13 @@
 import React, { useContext, useState } from 'react';
-import { AppContext } from '../../context/reducers';
+import GameContext from '../../context/GameContext';
 
-import GamePlay from './GamePlay/GamePlay';
-import GamePreferences from './Preferences/GamePreferences';
+import GamePlay from './gamePlay/GamePlay';
+import GamePreferences from './preferences/GamePreferences';
 
 import './App.scss';
 
 const App: React.FC = () => {
-  const { state } = useContext(AppContext);
+  const { state } = useContext(GameContext);
 
   const [startGame, setStartGame] = useState(false);
 

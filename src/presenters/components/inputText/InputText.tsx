@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { IInput } from '../../../libs/interfaces';
+import { IInput } from '../../../libs/types';
 import './style.scss';
 
 const InputText: React.FC<IInput> = ({ onNewWord, placeholder, disabled }) => {

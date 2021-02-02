@@ -1,10 +1,11 @@
 import React, { useReducer } from 'react';
-import { AppContext, gameReducer, initialState } from './reducers';
+import { gameReducer, initialState } from '../store/reducer';
+import GameContext from './GameContext';
 
 const GameProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
-  return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>;
+  return <GameContext.Provider value={{ state, dispatch }}>{children}</GameContext.Provider>;
 };
 
 export default GameProvider;
