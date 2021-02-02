@@ -12,17 +12,19 @@ const InputWord: React.FC<IInput> = ({ onNewWord, placeholder }) => {
     setDisabled(state.currentPlayer !== state.currentUser);
   }, [state.currentPlayer]);
 
-  const Components = useMemo(
+  const InputComponent = useMemo(
     () => ({
-      TEXT: () => <InputText onNewWord={onNewWord} placeholder={placeholder} disabled={disabled} />,
-      VOICE: () => (
-        <InputVoice onNewWord={onNewWord} placeholder={placeholder} disabled={disabled} />
-      ),
+      TEXT: () => {
+        return <InputText onNewWord={onNewWord} placeholder={placeholder} disabled={disabled} />;
+      },
+      VOICE: () => {
+        return <InputVoice onNewWord={onNewWord} placeholder={placeholder} disabled={disabled} />;
+      },
     }),
     [onNewWord, placeholder, disabled],
   );
 
-  return Components[state.preferences.inputType]();
+  return InputComponent[state.preferences.inputType]();
 };
 
 export default memo(InputWord);
