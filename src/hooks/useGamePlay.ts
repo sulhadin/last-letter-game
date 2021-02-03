@@ -1,88 +1,92 @@
-import { useState, useEffect, useContext, useRef, useCallback } from 'react';
-import GameContext from '../context/GameContext';
-import { nextPlayer } from './helpers/nextPlayer';
-import { checkWord } from '../controllers/playGame';
-import userType from './helpers/userType';
-import { setCurrentPlayerAction } from '../store/actions';
+import { useContext, useEffect, useMemo, useState } from 'react';
 
-export type IUseGamePlay = {
-  notValidMessage: string;
-  lastWord: string;
+import GameContext from '../context/GameContext';
+
+import useComputerPlay from './useComputerPlay';
+import playerType from '../libs/playerType';
+import useCountDown from './useCountDown';
+import useAutoPlay from './useAutoPlay';
+import textToSpeech from '../controllers/textToSpeech';
+import useGameController from './useGameController';
+
+type TGamePlay = {
+  gameOver: string | undefined;
+  setGameOver: (value: string) => void;
   addWord: (value: string) => void;
+  lastWord: string;
+  timer: number;
+  currentPlayerType: string | null;
 };
 
-const useGamePlay = (): IUseGamePlay => {
-  const { state, dispatch } = useContext(GameContext);
+const useGamePlay = (): TGamePlay => {
+  const { state } = useContext(GameContext);
 
-  // Test it.
-  const setCurrentPlayer = setCurrentPlayerAction(dispatch);
+  const [gameOver, setGameOver] = useState<string>();
 
-  const [lastWord, setLastWord] = useState<string>('');
-  const [notValidMessage, setNotValidMessage] = useState<string>('');
-  const resolveRef = useRef<(value: string) => void>();
+  const [timer, timeIsUp, restart, setIsActive] = useCountDown(10);
+  const { notValidMessage, lastWord, addWord, newPlayer } = useGameController();
+  const { word: autoPlayerWord } = useAutoPlay(newPlayer);
 
-  const switchPlayer = useCallback(() => {
-    const player = nextPlayer(state.currentPlayer, state.players);
-    dispatch({ type: 'currentPlayer', payload: player });
-
-    // Test it.
-    setCurrentPlayer(player);
-  }, [state]);
-
-  function isWordValid(newWord: string) {
-    const isValid = checkWord(
+  const computerProps = useMemo(
+    () => ({
       lastWord,
-      newWord,
-      state.preferences.charLength,
-      state.preferences.letterFromEnd,
-    );
-
-    if (!isValid) {
-      const user = userType(state.currentPlayer, state.players);
-      setNotValidMessage(`${user} lost.`);
-    }
-    return isValid;
-  }
-
-  const addWord = (word: string) => {
-    if (isWordValid(word)) {
-      resolveRef?.current?.(word);
-      setLastWord(word);
-    }
-  };
-
-  const saveWord = useCallback(
-    async (player: string | null, game: { [key: string]: string[] }) => {
-      const newWord: string = await new Promise((resolve) => {
-        resolveRef.current = resolve;
-      });
-
-      if (player) {
-        const words = [...game[player]];
-        words.push(newWord);
-
-        return {
-          ...game,
-          [player]: words,
-        };
-      }
-
-      return game;
-    },
-    [state.game],
+      player: newPlayer,
+      preferences: state.preferences,
+      players: state.players,
+      game: state.game,
+    }),
+    [state],
   );
 
+  const { computerLost, word: computerWord } = useComputerPlay(computerProps);
+
   useEffect(() => {
-    console.log('AWAITING..');
+    if (autoPlayerWord) {
+      addWord(autoPlayerWord);
+    }
+  }, [autoPlayerWord]);
 
-    saveWord(state.currentPlayer, state.game)
-      .then((game) => {
-        dispatch({ type: 'game', payload: game });
-      })
-      .finally(() => switchPlayer());
-  }, [state.currentPlayer]);
+  //  Read the response coming from computer.
+  useEffect(() => {
+    if (computerWord) {
+      addWord(computerWord);
 
-  return { notValidMessage, lastWord, addWord };
+      const speak = textToSpeech(computerWord);
+      speak();
+    }
+  }, [computerWord]);
+
+  useEffect(() => {
+    if (timeIsUp) {
+      setGameOver('Time is up!');
+    }
+  }, [timeIsUp]);
+
+  useEffect(() => {
+    restart();
+  }, [newPlayer]);
+
+  useEffect(() => {
+    // TODO: Finish panel should appear.
+    setIsActive(false);
+  }, [gameOver]);
+
+  useEffect(() => {
+    setGameOver(computerLost);
+  }, [computerLost]);
+
+  useEffect(() => {
+    setGameOver(notValidMessage);
+  }, [notValidMessage]);
+
+  return {
+    gameOver,
+    setGameOver,
+    addWord,
+    lastWord,
+    timer,
+    currentPlayerType: playerType(state.currentPlayer, state.players),
+  };
 };
 
 export default useGamePlay;

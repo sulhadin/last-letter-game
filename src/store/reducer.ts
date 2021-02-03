@@ -3,8 +3,8 @@ import { TInitialState, TPlayerActions } from './types';
 const initialState: TInitialState = {
   game: {},
   players: {},
-  currentPlayer: null,
-  currentUser: null,
+  currentPlayer: undefined,
+  currentUser: undefined,
   preferences: {
     charLength: 1,
     letterFromEnd: true,

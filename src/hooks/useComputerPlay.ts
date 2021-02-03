@@ -1,49 +1,59 @@
-import { useState, useEffect, useContext, useCallback } from 'react';
-import GameContext from '../context/GameContext';
-import { playGame } from '../controllers/playGame';
-import delay from '../libs/delay';
-import textToSpeech from '../controllers/textToSpeech';
+import { useState, useEffect, useCallback } from 'react';
 
-type IUseComputerPlayResult = {
-  computerLost: string;
+import { TGame, TPlayer, TPlayers, TPreferences } from '../libs/types';
+
+import { playGame } from '../controllers/playGame';
+import { playerTypeCheck } from '../libs/playerType';
+import { UserType } from '../libs/enums';
+import { getWords } from '../libs/utils';
+import delay from '../libs/delay';
+
+type IComputerPlay = {
+  computerLost: string | undefined;
+  word: string | undefined;
 };
 
-const useComputerPlay = (
-  lastWord: string,
-  addWord: (value: string) => void,
-): IUseComputerPlayResult => {
-  const { state } = useContext(GameContext);
-  const [computerLost, setComputerLost] = useState<string>('');
+type TParams = {
+  lastWord: string;
+  player: TPlayer;
+  preferences: TPreferences;
+  players: TPlayers;
+  game: TGame;
+};
 
-  const readAnswer = (response: string) => {
-    const speak = textToSpeech(response);
-    speak();
-  };
+const useComputerPlay = ({
+  lastWord,
+  player,
+  preferences,
+  players,
+  game,
+}: TParams): IComputerPlay => {
+  const [computerLost, setComputerLost] = useState<string>();
+  const [word, setWord] = useState<string>();
 
   const play = useCallback(
-    (words: string[]) => {
-      delay(() => {
-        const answer = playGame(lastWord, words, state.preferences);
-        readAnswer(answer.response);
+    (wordList: string[]) => {
+      const answer = playGame(lastWord, wordList, preferences);
 
-        if (answer.found) {
-          addWord(answer.response);
-        } else {
-          setComputerLost(answer.response);
-        }
-      }, [100, 3000]);
+      if (answer.found) {
+        setWord(answer.response);
+      } else {
+        setComputerLost(answer.response);
+      }
     },
-    [state.currentPlayer],
+    [player, lastWord],
   );
 
   useEffect(() => {
-    if (state.currentPlayer && state.players[state.currentPlayer] === 'Computer') {
-      const words = Object.values(state.game).flat();
-      play(words);
-    }
-  }, [state.currentPlayer]);
+    const isPlayerComputer = playerTypeCheck(player, players, UserType.COMPUTER);
 
-  return { computerLost };
+    if (isPlayerComputer) {
+      const words = getWords(game);
+      delay(() => play(words), [100, 3000]);
+    }
+  }, [player]);
+
+  return { computerLost, word };
 };
 
 export default useComputerPlay;

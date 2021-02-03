@@ -1,4 +1,4 @@
-import { TPreferences } from '../libs/types';
+import { TGame, TPlayer, TPlayers, TPreferences } from '../libs/types';
 
 export type TActionMap<M extends { [index: string]: any }> = {
   [Key in keyof M]: M[Key] extends undefined
@@ -12,10 +12,10 @@ export type TActionMap<M extends { [index: string]: any }> = {
 };
 
 export type TInitialState = {
-  game: { [player: string]: string[] };
-  players: { [player: string]: string };
-  currentPlayer: string | null;
-  currentUser: string | null;
+  game: TGame;
+  players: TPlayers;
+  currentPlayer: TPlayer;
+  currentUser: TPlayer;
   preferences: TPreferences;
 };
 

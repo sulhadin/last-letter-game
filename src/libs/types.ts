@@ -24,3 +24,9 @@ export type TPreferences = {
   restricted: boolean;
   inputType: 'TEXT' | 'VOICE';
 };
+
+export type TPlayer = string | undefined;
+
+export type TPlayers = { [key: string]: string };
+
+export type TGame = { [player: string]: string[] };

@@ -1,9 +1,6 @@
-const playerComputer = 'Computer';
+import { TPlayer, TPlayers } from '../../libs/types';
 
-const nextPlayer = (
-  currentPlayer: string | null,
-  players: { [player: string]: string },
-): string => {
+const nextPlayer = (currentPlayer: TPlayer, players: TPlayers): string => {
   const keys = Object.keys(players);
 
   if (!currentPlayer) {
@@ -20,4 +17,4 @@ const nextPlayer = (
   return keys[0];
 };
 
-export { nextPlayer, playerComputer };
+export default nextPlayer;

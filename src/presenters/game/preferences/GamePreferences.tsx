@@ -23,7 +23,7 @@ const GamePreferences: React.FC<IGamePreferences> = ({ setStartGame }) => {
 
   const handleChangeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { target } = event;
-    console.log(target.name, target.value);
+
     setFormValues({
       ...formValues,
       [target.name]: target.value,
@@ -38,7 +38,7 @@ const GamePreferences: React.FC<IGamePreferences> = ({ setStartGame }) => {
 
     dispatch({
       type: 'players',
-      payload: { A923476983: 'Player', B8486384963: 'Computer' },
+      payload: { A923476983: 'HUMAN', B8486384963: 'COMPUTER' },
     });
 
     dispatch({
