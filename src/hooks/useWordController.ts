@@ -1,32 +1,38 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import GameContext from '../context/GameContext';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { checkWord } from '../controllers/playGame';
 import playerType from '../libs/playerType';
-import { TPlayer } from '../libs/types';
+import { TGame, TPlayer, TPlayers, TPreferences } from '../libs/types';
 
-export type IWordController = {
+interface IWordController {
   notValidMessage: string;
   lastWord: string;
+  gameData: TGame | undefined;
   addWord: (value: string) => void;
+}
+
+type TWordController = {
+  preferences: TPreferences;
+  currentPlayer: TPlayer;
+  players: TPlayers;
+  game: TGame;
 };
 
-const useWordController = (): IWordController => {
-  const { state, dispatch } = useContext(GameContext);
-
+const useWordController = ({
+  players,
+  currentPlayer,
+  preferences,
+  game,
+}: TWordController): IWordController => {
+  const [gameData, setGameData] = useState<TGame>();
   const [lastWord, setLastWord] = useState<string>('');
   const [notValidMessage, setNotValidMessage] = useState<string>('');
   const resolveRef = useRef<(value: string) => void>();
 
   const isWordValid = (newWord: string): boolean => {
-    const isValid = checkWord(
-      lastWord,
-      newWord,
-      state.preferences.charLength,
-      state.preferences.letterFromEnd,
-    );
+    const isValid = checkWord(lastWord, newWord, preferences.charLength, preferences.letterFromEnd);
 
     if (!isValid) {
-      const user = playerType(state.currentPlayer, state.players);
+      const user = playerType(currentPlayer, players);
       setNotValidMessage(`${user} lost.`);
     }
     return isValid;
@@ -42,25 +48,25 @@ const useWordController = (): IWordController => {
     return new Promise((resolve: (word: string) => void) => {
       resolveRef.current = resolve;
     });
-  }, [state.game]);
+  }, [game]);
 
   const saveWord = useCallback(
-    (newWord: string, player: TPlayer, game: { [key: string]: string[] }) => {
-      let gameData = game;
+    (newWord: string, player: TPlayer) => {
+      let data = game;
 
       if (player) {
         const words = [...game[player]];
         words.push(newWord);
 
-        gameData = {
+        data = {
           ...game,
           [player]: words,
         };
       }
 
-      dispatch({ type: 'game', payload: gameData });
+      setGameData(data);
     },
-    [state.game],
+    [game],
   );
 
   useEffect(() => {
@@ -68,13 +74,13 @@ const useWordController = (): IWordController => {
       const newWord = await getWord();
       setLastWord(newWord);
 
-      saveWord(newWord, state.currentPlayer, state.game);
+      saveWord(newWord, currentPlayer);
     };
 
     fn().then();
-  }, [state.currentPlayer]);
+  }, [currentPlayer]);
 
-  return { notValidMessage, lastWord, addWord };
+  return { notValidMessage, lastWord, addWord, gameData };
 };
 
 export default useWordController;

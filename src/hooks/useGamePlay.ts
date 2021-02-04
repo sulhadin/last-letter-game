@@ -4,7 +4,6 @@ import GameContext from '../context/GameContext';
 
 import useComputerPlay from './useComputerPlay';
 import playerType from '../libs/playerType';
-import useCountDown from './useCountDown';
 import useAutoPlay from './useAutoPlay';
 import textToSpeech from '../controllers/textToSpeech';
 import useGameController from './useGameController';
@@ -14,7 +13,6 @@ type TGamePlay = {
   setGameOver: (value: string) => void;
   addWord: (value: string) => void;
   lastWord: string;
-  timer: number;
   currentPlayerType: string | null;
 };
 
@@ -23,22 +21,15 @@ const useGamePlay = (): TGamePlay => {
 
   const [gameOver, setGameOver] = useState<string>();
 
-  const [timer, timeIsUp, restart, setIsActive] = useCountDown(10);
   const { notValidMessage, lastWord, addWord, newPlayer } = useGameController();
   const { word: autoPlayerWord } = useAutoPlay(newPlayer);
-
-  const computerProps = useMemo(
-    () => ({
-      lastWord,
-      player: newPlayer,
-      preferences: state.preferences,
-      players: state.players,
-      game: state.game,
-    }),
-    [state],
-  );
-
-  const { computerLost, word: computerWord } = useComputerPlay(computerProps);
+  const { computerLost, word: computerWord } = useComputerPlay({
+    lastWord,
+    player: newPlayer,
+    preferences: state.preferences,
+    players: state.players,
+    game: state.game,
+  });
 
   useEffect(() => {
     if (autoPlayerWord) {
@@ -57,21 +48,6 @@ const useGamePlay = (): TGamePlay => {
   }, [computerWord]);
 
   useEffect(() => {
-    if (timeIsUp) {
-      setGameOver('Time is up!');
-    }
-  }, [timeIsUp]);
-
-  useEffect(() => {
-    restart();
-  }, [newPlayer]);
-
-  useEffect(() => {
-    // TODO: Finish panel should appear.
-    setIsActive(false);
-  }, [gameOver]);
-
-  useEffect(() => {
     setGameOver(computerLost);
   }, [computerLost]);
 
@@ -79,13 +55,14 @@ const useGamePlay = (): TGamePlay => {
     setGameOver(notValidMessage);
   }, [notValidMessage]);
 
+  const currentPlayerType = useMemo(() => playerType(state.currentPlayer, state.players), [state]);
+
   return {
     gameOver,
     setGameOver,
     addWord,
     lastWord,
-    timer,
-    currentPlayerType: playerType(state.currentPlayer, state.players),
+    currentPlayerType,
   };
 };
 

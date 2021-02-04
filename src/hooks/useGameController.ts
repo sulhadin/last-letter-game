@@ -10,10 +10,16 @@ type TGameController = {
   lastWord: string;
   newPlayer: TPlayer;
 };
-const useGameController = (): TGameController => {
-  const { dispatch } = useContext(GameContext);
 
-  const { notValidMessage, lastWord, addWord } = useWordController();
+const useGameController = (): TGameController => {
+  const { state, dispatch } = useContext(GameContext);
+
+  const { notValidMessage, lastWord, addWord, gameData } = useWordController({
+    players: state.players,
+    currentPlayer: state.currentPlayer,
+    preferences: state.preferences,
+    game: state.game,
+  });
 
   const { newPlayer } = usePlayerSwitcher(lastWord);
 
@@ -22,6 +28,10 @@ const useGameController = (): TGameController => {
     // const setCurrentPlayerTest = setCurrentPlayerAction(dispatch);
     dispatch({ type: 'currentPlayer', payload: newPlayer });
   }, [newPlayer]);
+
+  useEffect(() => {
+    dispatch({ type: 'game', payload: gameData });
+  }, [gameData]);
 
   return {
     notValidMessage,
