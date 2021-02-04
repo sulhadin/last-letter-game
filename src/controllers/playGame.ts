@@ -1,17 +1,9 @@
 import words from '../libs/data/names.json';
 import { IResult, IPayload, TPreferences } from '../libs/types';
 import randomize from '../libs/randomize';
+import { probability, splicer } from '../libs/utils';
 
 const lostMessage = "Sorry, I've lost :(";
-
-function probability(n: number): boolean {
-  return !!n && Math.random() <= n;
-}
-
-const splicer = (word: string, length: number, fromEnd: boolean): string => {
-  const startIndex = fromEnd ? word.length - 1 : 0;
-  return word.substr(startIndex, length);
-};
 
 function resultFormatter(word: string, found = true): IResult {
   return {
@@ -72,14 +64,4 @@ function playGame(word: string, spoken: string[], preferences: TPreferences): IR
   return seekAndFind({ letters });
 }
 
-function checkWord(
-  prevWord: string,
-  word: string,
-  charLength: number,
-  lettersFromEnd: boolean,
-): boolean {
-  const letters = splicer(prevWord, charLength, lettersFromEnd);
-  return word.startsWith(letters);
-}
-
-export { playGame, getRandomWord, checkWord };
+export { playGame, getRandomWord };

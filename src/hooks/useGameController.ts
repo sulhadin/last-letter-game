@@ -30,7 +30,9 @@ const useGameController = (): TGameController => {
   }, [newPlayer]);
 
   useEffect(() => {
-    dispatch({ type: 'game', payload: gameData });
+    if (gameData) {
+      dispatch({ type: 'game', payload: gameData });
+    }
   }, [gameData]);
 
   return {

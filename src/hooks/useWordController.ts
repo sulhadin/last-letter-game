@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { checkWord } from '../controllers/playGame';
+import { checkWord, getWords, isWordExist } from '../libs/utils';
 import playerType from '../libs/playerType';
 import { TGame, TPlayer, TPlayers, TPreferences } from '../libs/types';
 
@@ -31,11 +31,21 @@ const useWordController = ({
   const isWordValid = (newWord: string): boolean => {
     const isValid = checkWord(lastWord, newWord, preferences.charLength, preferences.letterFromEnd);
 
+    const words = getWords(game);
+    const isExist = isWordExist(newWord, words);
+
+    if (isExist) {
+      const user = playerType(currentPlayer, players);
+      setNotValidMessage(`${user} said an existing word!.`);
+      return false;
+    }
+
     if (!isValid) {
       const user = playerType(currentPlayer, players);
       setNotValidMessage(`${user} lost.`);
+      return false;
     }
-    return isValid;
+    return true;
   };
 
   const addWord = (word: string) => {

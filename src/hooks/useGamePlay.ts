@@ -7,13 +7,16 @@ import playerType from '../libs/playerType';
 import useAutoPlay from './useAutoPlay';
 import textToSpeech from '../controllers/textToSpeech';
 import useGameController from './useGameController';
+import { TGame, TPlayers } from '../libs/types';
 
 type TGamePlay = {
   gameOver: string | undefined;
   setGameOver: (value: string) => void;
   addWord: (value: string) => void;
   lastWord: string;
+  gameData: TGame;
   currentPlayerType: string | null;
+  players: TPlayers;
 };
 
 const useGamePlay = (): TGamePlay => {
@@ -63,6 +66,8 @@ const useGamePlay = (): TGamePlay => {
     addWord,
     lastWord,
     currentPlayerType,
+    gameData: state.game,
+    players: state.players,
   };
 };
 
