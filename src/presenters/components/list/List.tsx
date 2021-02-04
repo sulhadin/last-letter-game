@@ -1,9 +1,8 @@
 import React, { memo } from 'react';
-import { Spoken } from '../../../libs/types';
 import './style.scss';
 
 interface IList {
-  data: Spoken;
+  data: [];
   empty: string;
   title: string;
 }
@@ -16,7 +15,7 @@ const List: React.FC<IList> = ({ data, title, empty }) => {
   return (
     <div className="list-area">
       <h3>{title}</h3>
-      {data.reverse().map(({ id, item }, i) => (
+      {data.reverse().map(({ id, item }, i: number) => (
         <div key={id} className={`text ${i % 2 === 0 ? 'R' : 'L'}`}>
           {item}
         </div>
