@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import './style.scss';
 
 interface IList {
-  data: [];
+  data: string[] | [];
   empty: string;
   title: string;
 }
@@ -14,9 +14,11 @@ const List: React.FC<IList> = ({ data, title, empty }) => {
 
   return (
     <div className="list-area">
-      <h3>{title}</h3>
-      {data.reverse().map(({ id, item }, i: number) => (
-        <div key={id} className={`text ${i % 2 === 0 ? 'R' : 'L'}`}>
+      <div className="list-title">
+        <h3>{title}</h3>
+      </div>
+      {data.reverse().map((item) => (
+        <div key={item} className="text">
           {item}
         </div>
       ))}

@@ -1,13 +1,13 @@
 import React, { memo, useCallback, useState } from 'react';
-import List from '../../components/list/List';
 import WordViewer from '../../components/textViewer/TextViewer';
 import InputWord from '../inputs/Inputs';
 import useGamePlay from '../../../hooks/useGamePlay';
 import './style.scss';
 import Timer from './components/Timer';
+import Lists from '../lists/Lists';
 
 const GamePlay: React.FC = () => {
-  const { gameOver, lastWord, currentPlayerType, addWord } = useGamePlay();
+  const { gameOver, lastWord, currentPlayerType, addWord, gameData, players } = useGamePlay();
   const [timeUp, setTimeUp] = useState<string>();
 
   const onTimeUp = useCallback(
@@ -27,7 +27,7 @@ const GamePlay: React.FC = () => {
 
       <WordViewer size="small" word={`It is now ${currentPlayerType}'s turn`} />
       <InputWord onNewWord={addWord} placeholder="Please say some word!" />
-      <List data={[]} empty="Word chain is empty." title="Word chain" />
+      <Lists gameData={gameData} players={players} />
     </div>
   );
 };

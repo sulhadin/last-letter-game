@@ -5,7 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: { index: path.resolve(__dirname, 'src', 'index.tsx') },
@@ -15,7 +15,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new CopyWebpackPlugin({
+    new CopyPlugin({
       patterns: [
         {
           from: path.resolve(__dirname, 'public/manifest.json'),
