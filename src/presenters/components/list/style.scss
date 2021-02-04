@@ -1,0 +1,21 @@
+.list-area {
+  width:50%;
+  padding:5px;
+  margin: 0 auto 5px;
+  display: table;
+  height: 300px;
+  overflow-y: scroll;
+  .list-title{
+    text-align: center;
+  }
+  .text {
+    color: var(--title-color);
+    font-size: 15px;
+    font-weight: lighter;
+    line-height: 21px;
+    width: 80%;
+    border: 1px solid var(--input-border);
+    padding: 5px 0 5px 10px;
+    margin:8px auto;
+  }
+}

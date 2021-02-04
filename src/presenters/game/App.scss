@@ -1,0 +1,67 @@
+.last-letter-game-app {
+  text-align: center;
+  button {
+    background-color:#4a74b3;
+    border:1px solid #2a5ba3;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    padding:10px 31px;
+    text-decoration:none;
+    text-shadow:0 1px 0 #2a5ba3;
+    &:hover {
+      background-color:#527dbd;
+    }
+    &:active {
+      position:relative;
+      top:1px;
+    }
+  }
+}
+
+.preferences-form{
+  .form-item {
+    margin: 10px 0;
+    input[type="number" i]{
+      width: 50px;
+    }
+ }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .last-letter-game-app {
+    width: 100%;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .last-letter-game-app {
+    width: 100%;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .last-letter-game-app {
+    width: 80%;
+    margin:0 auto;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .last-letter-game-app {
+    width: 80%;
+    margin:0 auto;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .last-letter-game-app {
+    width: 700px;
+    margin:0 auto;
+  }
+}

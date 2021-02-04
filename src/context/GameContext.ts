@@ -1,13 +1,13 @@
-import { createContext, Dispatch, SetStateAction } from 'react';
-import { Spoken } from '../libs/types';
+import { createContext, Dispatch } from 'react';
+import { TInitialState } from '../store/types';
+import { initialState } from '../store/reducer';
 
-type AppContextState = Spoken;
+const GameContext = createContext<{
+  state: TInitialState;
+  dispatch: Dispatch<any>;
+}>({
+  state: initialState,
+  dispatch: () => null,
+});
 
-export type AppContextValue = {
-  state: AppContextState;
-  setState: Dispatch<SetStateAction<AppContextState>>;
-};
-
-const GameContext = createContext<AppContextValue>({} as AppContextValue);
-
-export { GameContext };
+export default GameContext;
