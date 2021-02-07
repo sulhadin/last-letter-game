@@ -1,7 +1,8 @@
-import names from '../libs/data/names.json';
-import { IResult, IPayload, TPreferences } from '../libs/types';
-import randomize from '../libs/randomize';
-import { probability, splicer } from '../libs/utils';
+import names from '../assets/data/names.json';
+import { IResult, IPayload, TPreferences } from '../utils/types';
+import randomize from '../utils/randomize';
+import { probability } from './playerController';
+import { splicer } from './wordController';
 
 const lostMessage = "Sorry, I've lost :(";
 
@@ -69,7 +70,7 @@ function probabilityLogic(probabilityPercent: number): IResult {
  * @param words
  * @param preferences
  */
-function seekWord(word: string, words: string[], preferences: TPreferences): IResult {
+function aiController(word: string, words: string[], preferences: TPreferences): IResult {
   const result = probabilityLogic(preferences.probabilityPercent);
 
   if (!result.found) {
@@ -79,11 +80,10 @@ function seekWord(word: string, words: string[], preferences: TPreferences): IRe
   const letters = splicer(word, preferences.charLength, preferences.letterFromEnd);
 
   if (preferences.restricted) {
-    console.log({ letters, words });
     return restrictedSeekAndFind({ letters, words });
   }
 
   return seekAndFind({ letters });
 }
 
-export { seekWord, getRandomWord };
+export { aiController, getRandomWord };

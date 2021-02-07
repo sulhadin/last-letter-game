@@ -23,7 +23,6 @@ export function getSpeechRecognition(lang: string): SpeechRecognition {
   recognition.lang = lang;
 
   recognition.onresult = (event: SpeechRecognitionEvent) => {
-    console.log('onresult', event.results[0][0].transcript);
     document.dispatchEvent(
       new CustomEvent('speechResultEvent', {
         detail: { result: event.results[0][0].transcript },
@@ -41,9 +40,9 @@ export function getSpeechRecognition(lang: string): SpeechRecognition {
     );
   };
 
-  recognition.onerror = (e) => {
+  recognition.onerror = () => {
     recognition.stop();
-    console.log('stopped', e);
+
     document.dispatchEvent(
       new CustomEvent('speechStopEvent', {
         detail: { result: 'stopped' },

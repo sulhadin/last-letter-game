@@ -1,8 +1,4 @@
-import { TWordResult, TGame, TPlayer } from './types';
-
-export const probability = (n: number): boolean => {
-  return !!n && Math.random() <= n;
-};
+import { TGame, TPlayer, TWordResult } from '../utils/types';
 
 export const splicer = (word: string, length: number, fromEnd: boolean): string => {
   const startIndex = fromEnd ? word.length - 1 : 0;
@@ -28,20 +24,6 @@ export const isWordExist = (word: string, game: TGame): boolean => {
   return words.includes(word);
 };
 
-export const validResult = (response?: string): TWordResult => {
-  return {
-    result: response ?? '',
-    valid: true,
-  };
-};
-
-export const invalidResult = (response?: string): TWordResult => {
-  return {
-    result: response ?? '',
-    invalid: true,
-  };
-};
-
 export const addNewWord = (word: string, words: TGame, player: TPlayer): TGame => {
   if (!player) {
     return words;
@@ -53,5 +35,19 @@ export const addNewWord = (word: string, words: TGame, player: TPlayer): TGame =
   return {
     ...words,
     [player]: copyWords,
+  };
+};
+
+export const validResult = (response?: string): TWordResult => {
+  return {
+    result: response ?? '',
+    valid: true,
+  };
+};
+
+export const invalidResult = (response?: string): TWordResult => {
+  return {
+    result: response ?? '',
+    invalid: true,
   };
 };

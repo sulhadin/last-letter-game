@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import GameContext from '../../../context/GameContext';
-import { TGamePreferences } from '../../../libs/types';
+import { TGamePreferences } from '../../../utils/types';
 
 interface IGamePreferences {
   setStartGame: (value: boolean) => void;

@@ -1,5 +1,4 @@
 // interfaces
-
 export interface IResult {
   response: string;
   found: boolean;

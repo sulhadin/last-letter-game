@@ -1,10 +1,12 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
-import SpeechToText from '../../../controllers/speechToText';
-import { IInput } from '../../../libs/types';
+
+import useSpeechListener from '../../../hooks/useSpeechListener';
+import SpeechToText from '../../../utils/speechToText';
+import { MicEnum } from '../../../utils/enums';
+import { IInput } from '../../../utils/types';
+
 import mute from '../../../assets/mute.png';
 import unmute from '../../../assets/unmute.png';
-import useSpeechListener from '../../../hooks/useSpeechListener';
-import { MicEnum } from '../../../libs/enums';
 
 const microphone = {
   [MicEnum.Mute]: mute,
@@ -28,7 +30,6 @@ const InputVoice: React.FC<IInput> = ({ onNewWord, placeholder, disabled }) => {
   };
 
   useEffect(() => {
-    console.log(speechStopped && speech, speechStopped, speech);
     if (speechStopped && speech) {
       onNewWord({
         played: true,

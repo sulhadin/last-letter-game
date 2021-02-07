@@ -1,25 +1,23 @@
 import { useState, useCallback, useContext } from 'react';
 
-import { getRandomWord, seekWord } from '../controllers/seekWord';
-import { getWords } from '../libs/utils';
-import delay from '../libs/delay';
 import GameContext from '../context/GameContext';
-import { IPlayerResult, IResult } from '../libs/types';
-import { AIPlayerType } from '../libs/enums';
 
-type TComputerPlayer = {
-  response: IPlayerResult;
-  play: () => void;
-};
+import { getRandomWord, aiController } from '../controllers/aiController';
+import { getWords } from '../controllers/wordController';
+import delay from '../utils/delay';
 
-const useComputerPlayer = (type: string, word?: string): TComputerPlayer => {
+import { AIPlayerType } from '../utils/enums';
+import { IPlayerResult, IResult } from '../utils/types';
+import { TAIPlay } from './types';
+
+const useAIPlay = (type: string, word?: string): TAIPlay => {
   const { state } = useContext(GameContext);
 
   const aiWordLogic = {
     [AIPlayerType.COMPUTER]: {
       seekWord(wordList: string[]): IResult | null {
         if (word) {
-          return seekWord(word, wordList, state.preferences);
+          return aiController(word, wordList, state.preferences);
         }
         return null;
       },
@@ -62,4 +60,4 @@ const useComputerPlayer = (type: string, word?: string): TComputerPlayer => {
   return { response, play };
 };
 
-export default useComputerPlayer;
+export default useAIPlay;

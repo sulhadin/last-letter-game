@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
-import { TGame, TPlayers } from '../../../libs/types';
+import { TGame, TPlayers } from '../../../utils/types';
 import WordList from '../../components/list/WordList';
 import './style.scss';
-import getPlayer from '../../../libs/getPlayer';
+import { getPlayer } from '../../../controllers/playerController';
 
 interface IList {
   gameData: TGame;

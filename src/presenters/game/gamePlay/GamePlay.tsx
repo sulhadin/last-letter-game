@@ -1,11 +1,13 @@
 import React, { memo, useCallback, useContext, useState } from 'react';
+
+import GameContext from '../../../context/GameContext';
+
+import useGamePlay from '../../../hooks/useGamePlay';
 import TextViewer from '../../components/textViewer/TextViewer';
 import InputWord from '../inputs/InputWord';
-import useGamePlay from '../../../hooks/useGamePlay';
-import './style.scss';
 import Timer from './components/Timer';
 import Lists from '../lists/Lists';
-import GameContext from '../../../context/GameContext';
+import './style.scss';
 
 const GamePlay: React.FC = () => {
   const { state } = useContext(GameContext);

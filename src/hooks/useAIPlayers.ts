@@ -1,20 +1,15 @@
-import { useEffect } from 'react';
-import useComputerPlayer from './useComputerPlayer';
-import textToSpeech from '../controllers/textToSpeech';
-import { IPlayerResult } from '../libs/types';
+import { useEffect, useMemo } from 'react';
+import useAIPlay from './useAIPlay';
+import textToSpeech from '../utils/textToSpeech';
+import { TAIPlayers } from './types';
 
-type TPlayers = {
-  response: IPlayerResult;
-  play: () => void;
-};
-
-const useAIPlayers = (playerType: string, word?: string): TPlayers => {
-  const { response, play } = useComputerPlayer(playerType, word);
+const useAIPlayers = (playerType: string, word?: string): TAIPlayers => {
+  const { response, play } = useAIPlay(playerType, word);
+  const speak = useMemo(() => textToSpeech('tr'), []);
 
   useEffect(() => {
     if (response.found) {
-      const speak = textToSpeech(response.response);
-      speak();
+      speak(response.response);
     }
   }, [response]);
 

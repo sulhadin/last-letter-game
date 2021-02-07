@@ -1,18 +1,12 @@
 import { useCallback, useContext, useRef, useState } from 'react';
-import { IPlayerResult } from '../libs/types';
-import getNextPlayer from './helpers/getNextPlayer';
+
 import GameContext from '../context/GameContext';
 
-export type TPlayerController = {
-  player: {
-    play: () => void;
-    nextPlayer: () => void;
-  };
-  addWord: (value: IPlayerResult) => void;
-  lastAction: IPlayerResult | undefined;
-};
+import { getNextPlayer } from '../controllers/playerController';
+import { IPlayerResult } from '../utils/types';
+import { TUsePlayer } from './types';
 
-const usePlayerController = (): TPlayerController => {
+const usePlayer = (): TUsePlayer => {
   const { state, dispatch } = useContext(GameContext);
 
   const resolveRef = useRef<(value: IPlayerResult) => void>();
@@ -47,4 +41,4 @@ const usePlayerController = (): TPlayerController => {
   };
 };
 
-export default usePlayerController;
+export default usePlayer;

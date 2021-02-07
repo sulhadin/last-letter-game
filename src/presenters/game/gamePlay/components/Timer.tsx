@@ -1,13 +1,12 @@
 import React, { memo, useContext, useEffect } from 'react';
-import TextViewer from '../../../components/textViewer/TextViewer';
-import useCountDown from '../../../../hooks/useCountDown';
+
 import { GameContext } from '../../../../context';
 
-type TProps = {
-  onTimeIsUp: () => void;
-};
+import TextViewer from '../../../components/textViewer/TextViewer';
+import useCountDown from '../../../../hooks/useCountDown';
+import { TTimer } from './types';
 
-const Timer: React.FC<TProps> = ({ onTimeIsUp }) => {
+const Timer: React.FC<TTimer> = ({ onTimeIsUp }) => {
   const { state, dispatch } = useContext(GameContext);
   const [second, timeIsUp, restart, setActive] = useCountDown(state.timer.second);
 

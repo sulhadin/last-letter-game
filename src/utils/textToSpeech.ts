@@ -6,11 +6,12 @@ export function getSpeechSynthesisUtterance(text: string): SpeechSynthesisUttera
 /**
  * Uses webkit speech recognition.
  *
- * @param text Some text to be converted into speech.
+ * @param lang Language definition
  */
-function textToSpeech(text: string): () => void {
-  const utterThis = getSpeechSynthesisUtterance(text);
-  return () => {
+function textToSpeech(lang: string): (text: string) => void {
+  return (text: string) => {
+    const utterThis = getSpeechSynthesisUtterance(text);
+    utterThis.lang = lang;
     synth.speak(utterThis);
   };
 }

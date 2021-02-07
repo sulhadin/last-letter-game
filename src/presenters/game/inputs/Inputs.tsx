@@ -1,8 +1,10 @@
 import React, { memo, useContext, useMemo } from 'react';
+
+import GameContext from '../../../context/GameContext';
+
+import { IInput } from '../../../utils/types';
 import InputText from '../../components/inputText/InputText';
 import InputVoice from '../../components/inputVoice/InputVoice';
-import GameContext from '../../../context/GameContext';
-import { IInput } from '../../../libs/types';
 
 const Inputs: React.FC<IInput> = ({ onNewWord, placeholder, disabled }) => {
   const { state } = useContext(GameContext);

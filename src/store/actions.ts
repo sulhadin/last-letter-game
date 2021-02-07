@@ -1,5 +1,5 @@
 import { TPlayerActions } from './types';
-import { TPlayer } from '../libs/types';
+import { TPlayer } from '../utils/types';
 
 export const setCurrentPlayerAction = (
   dispatch: (value: TPlayerActions) => void,

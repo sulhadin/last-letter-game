@@ -1,11 +1,7 @@
 import React, { memo } from 'react';
-import './style.scss';
 
-interface IList {
-  data: string[] | [];
-  empty: string;
-  title: string;
-}
+import { IList } from './types';
+import './style.scss';
 
 const WordList: React.FC<IList> = ({ data, title, empty }) => {
   if (!data.length) {
