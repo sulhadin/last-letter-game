@@ -1,16 +1,11 @@
-import React, { memo, useContext, useEffect, useMemo } from 'react';
+import React, { memo, useContext, useMemo } from 'react';
 import InputText from '../../components/inputText/InputText';
 import InputVoice from '../../components/inputVoice/InputVoice';
 import GameContext from '../../../context/GameContext';
 import { IInput } from '../../../libs/types';
 
-const Inputs: React.FC<IInput> = ({ onNewWord, placeholder }) => {
+const Inputs: React.FC<IInput> = ({ onNewWord, placeholder, disabled }) => {
   const { state } = useContext(GameContext);
-  const [disabled, setDisabled] = React.useState<boolean>(false);
-
-  useEffect(() => {
-    setDisabled(state.currentPlayer !== state.currentUser);
-  }, [state.currentPlayer]);
 
   const InputComponent = useMemo(
     () => ({

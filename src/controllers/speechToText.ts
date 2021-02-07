@@ -10,14 +10,48 @@ const { webkitSpeechRecognition } = window as Window;
 
 SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
 
-const recognition = new SpeechRecognition();
-recognition.continuous = false;
-recognition.interimResults = false;
-recognition.maxAlternatives = 1;
-
 interface ISpeechToTextResult {
   stop: () => void;
   start: () => void;
+}
+
+export function getSpeechRecognition(lang: string): SpeechRecognition {
+  const recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+  recognition.lang = lang;
+
+  recognition.onresult = (event: SpeechRecognitionEvent) => {
+    console.log('onresult', event.results[0][0].transcript);
+    document.dispatchEvent(
+      new CustomEvent('speechResultEvent', {
+        detail: { result: event.results[0][0].transcript },
+      }),
+    );
+  };
+
+  recognition.onspeechend = () => {
+    recognition.stop();
+
+    document.dispatchEvent(
+      new CustomEvent('speechStopEvent', {
+        detail: { result: 'stopped' },
+      }),
+    );
+  };
+
+  recognition.onerror = (e) => {
+    recognition.stop();
+    console.log('stopped', e);
+    document.dispatchEvent(
+      new CustomEvent('speechStopEvent', {
+        detail: { result: 'stopped' },
+      }),
+    );
+  };
+
+  return recognition;
 }
 
 export default function SpeechToText(lang: string): ISpeechToTextResult {
@@ -33,39 +67,10 @@ export default function SpeechToText(lang: string): ISpeechToTextResult {
   // speechRecognitionList.addFromString(grammar, 1);
   // recognition.grammars = speechRecognitionList;
   //* ********************************
-
-  recognition.lang = lang;
+  const recognition = getSpeechRecognition(lang);
 
   return {
     stop: () => recognition.stop(),
     start: () => recognition.start(),
   };
 }
-
-recognition.onresult = (event: SpeechRecognitionEvent) => {
-  document.dispatchEvent(
-    new CustomEvent('speechResultEvent', {
-      detail: { result: event.results[0][0].transcript },
-    }),
-  );
-};
-
-recognition.onspeechend = () => {
-  recognition.stop();
-
-  document.dispatchEvent(
-    new CustomEvent('speechStopEvent', {
-      detail: { result: 'stopped' },
-    }),
-  );
-};
-
-recognition.onerror = () => {
-  recognition.stop();
-
-  document.dispatchEvent(
-    new CustomEvent('speechStopEvent', {
-      detail: { result: 'stopped' },
-    }),
-  );
-};

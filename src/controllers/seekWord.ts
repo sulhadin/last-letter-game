@@ -1,4 +1,4 @@
-import words from '../libs/data/names.json';
+import names from '../libs/data/names.json';
 import { IResult, IPayload, TPreferences } from '../libs/types';
 import randomize from '../libs/randomize';
 import { probability, splicer } from '../libs/utils';
@@ -13,13 +13,13 @@ function resultFormatter(word: string, found = true): IResult {
 }
 
 function getRandomWord(): IResult {
-  const index = randomize(0, words.length - 1);
-  return resultFormatter(words[index]);
+  const index = randomize(0, names.length - 1);
+  return resultFormatter(names[index]);
 }
 
 function restrictedSeekAndFind(payload: IPayload): IResult {
-  const result = words.find(
-    (word) => word.startsWith(payload.letters) && !payload.spoken?.includes(word),
+  const result = names.find(
+    (word) => word.startsWith(payload.letters) && !payload.words?.includes(word),
   );
 
   if (!result) {
@@ -29,8 +29,12 @@ function restrictedSeekAndFind(payload: IPayload): IResult {
   return resultFormatter(result);
 }
 
+/**
+ *
+ * @param payload
+ */
 function seekAndFind(payload: IPayload): IResult {
-  const result = words.find((word) => word.startsWith(payload.letters));
+  const result = names.find((word) => word.startsWith(payload.letters));
 
   if (!result) {
     return resultFormatter(lostMessage, false);
@@ -39,29 +43,47 @@ function seekAndFind(payload: IPayload): IResult {
   return resultFormatter(result);
 }
 
+/**
+ *
+ * @param probabilityPercent
+ */
 function probabilityLogic(probabilityPercent: number): IResult {
   const shouldFind = probability(probabilityPercent);
 
   if (!shouldFind) {
-    return resultFormatter(lostMessage, false);
+    return {
+      response: lostMessage,
+      found: false,
+    };
   }
 
-  return resultFormatter('', true);
+  return {
+    response: '',
+    found: true,
+  };
 }
 
-function playGame(word: string, spoken: string[], preferences: TPreferences): IResult {
+/**
+ *
+ * @param word
+ * @param words
+ * @param preferences
+ */
+function seekWord(word: string, words: string[], preferences: TPreferences): IResult {
   const result = probabilityLogic(preferences.probabilityPercent);
+
   if (!result.found) {
     return result;
   }
 
   const letters = splicer(word, preferences.charLength, preferences.letterFromEnd);
 
-  if (preferences.restricted || spoken?.length === 0) {
-    return restrictedSeekAndFind({ letters, spoken });
+  if (preferences.restricted) {
+    console.log({ letters, words });
+    return restrictedSeekAndFind({ letters, words });
   }
 
   return seekAndFind({ letters });
 }
 
-export { playGame, getRandomWord };
+export { seekWord, getRandomWord };

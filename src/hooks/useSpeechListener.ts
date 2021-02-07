@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
-type TSpeechListener = [string, boolean, () => void, () => void];
+type TSpeechListener = [string | undefined, boolean, () => void, () => void, () => void];
 
 const useSpeechListener = (speechStarted: boolean): TSpeechListener => {
-  const [speech, setSpeech] = useState<string>('');
+  const [speech, setSpeech] = useState<string>();
   const [speechStopped, setSpeechStopped] = useState<boolean>(!speechStarted);
 
   const listenResult = (e: CustomEvent): void => {
@@ -17,6 +17,9 @@ const useSpeechListener = (speechStarted: boolean): TSpeechListener => {
   const listenStart = (): void => {
     setSpeechStopped(false);
   };
+  const reset = (): void => {
+    setSpeech(undefined);
+  };
 
   useEffect(() => {
     document.addEventListener('speechStopEvent', listenStop as EventListener);
@@ -27,7 +30,7 @@ const useSpeechListener = (speechStarted: boolean): TSpeechListener => {
     };
   }, []);
 
-  return [speech, speechStopped, listenStart, listenStop];
+  return [speech, speechStopped, reset, listenStart, listenStop];
 };
 
 export default useSpeechListener;

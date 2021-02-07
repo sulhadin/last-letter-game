@@ -4,12 +4,7 @@ import { IInput } from '../../../libs/types';
 import mute from '../../../assets/mute.png';
 import unmute from '../../../assets/unmute.png';
 import useSpeechListener from '../../../hooks/useSpeechListener';
-
-// eslint-disable-next-line no-shadow
-enum MicEnum {
-  Mute,
-  Unmute,
-}
+import { MicEnum } from '../../../libs/enums';
 
 const microphone = {
   [MicEnum.Mute]: mute,
@@ -18,7 +13,7 @@ const microphone = {
 
 const InputVoice: React.FC<IInput> = ({ onNewWord, placeholder, disabled }) => {
   const [muteState, setMuteState] = useState<MicEnum>(MicEnum.Unmute);
-  const [speech, speechStopped] = useSpeechListener(true);
+  const [speech, speechStopped, resetSpeech] = useSpeechListener(true);
 
   const speechToText = useMemo(() => SpeechToText('tr'), []);
 
@@ -33,8 +28,14 @@ const InputVoice: React.FC<IInput> = ({ onNewWord, placeholder, disabled }) => {
   };
 
   useEffect(() => {
+    console.log(speechStopped && speech, speechStopped, speech);
     if (speechStopped && speech) {
-      onNewWord(speech);
+      onNewWord({
+        played: true,
+        found: true,
+        response: speech,
+      });
+      resetSpeech();
     }
     if (speechStopped) {
       setMuteState(MicEnum.Mute);
@@ -51,8 +52,15 @@ const InputVoice: React.FC<IInput> = ({ onNewWord, placeholder, disabled }) => {
 
   return (
     <div className="input-voice">
-      <img src={microphone[muteState]} key={muteState} width={100} alt="mute" onClick={toggleMic} />
-      <div>{placeholder}</div>
+      <img
+        className="input-voice-toggle"
+        src={microphone[muteState]}
+        key={muteState}
+        width={100}
+        alt="mute"
+        onClick={toggleMic}
+      />
+      <div className="input-voice-placeholder">{placeholder}</div>
     </div>
   );
 };

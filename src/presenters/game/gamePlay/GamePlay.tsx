@@ -1,33 +1,34 @@
-import React, { memo, useCallback, useState } from 'react';
-import WordViewer from '../../components/textViewer/TextViewer';
-import InputWord from '../inputs/Inputs';
+import React, { memo, useCallback, useContext, useState } from 'react';
+import TextViewer from '../../components/textViewer/TextViewer';
+import InputWord from '../inputs/InputWord';
 import useGamePlay from '../../../hooks/useGamePlay';
 import './style.scss';
 import Timer from './components/Timer';
 import Lists from '../lists/Lists';
+import GameContext from '../../../context/GameContext';
 
 const GamePlay: React.FC = () => {
-  const { gameOver, lastWord, currentPlayerType, addWord, gameData, players } = useGamePlay();
-  const [timeUp, setTimeUp] = useState<string>();
+  const { state } = useContext(GameContext);
 
-  const onTimeUp = useCallback(
-    (value: string) => {
-      setTimeUp(value);
-    },
-    [setTimeUp],
-  );
+  const { lostMessage, currentPlayerType, addWord } = useGamePlay();
+
+  const [timeUpMessage, setTimeUpMessage] = useState<string>();
+
+  const onTimeUp = useCallback(() => {
+    setTimeUpMessage('Time is up!');
+  }, [setTimeUpMessage]);
 
   return (
     <div className="game-play">
-      <WordViewer prefix="Last word is" word={lastWord} className="title" />
-      <WordViewer word={gameOver} className="title danger" />
-      <WordViewer word={timeUp} className="title danger" />
+      <TextViewer prefix="Last word is" text={state.currentWord} />
+      <TextViewer text={lostMessage} type="danger" />
+      <TextViewer text={timeUpMessage} type="danger" />
 
-      <Timer onTimeUp={onTimeUp} isGameOver={!!gameOver} />
+      <Timer onTimeIsUp={onTimeUp} />
 
-      <WordViewer size="small" word={`It is now ${currentPlayerType}'s turn`} />
+      <TextViewer text={`It is now ${currentPlayerType}'s turn`} />
       <InputWord onNewWord={addWord} placeholder="Please say some word!" />
-      <Lists gameData={gameData} players={players} />
+      <Lists gameData={state.game} players={state.players} />
     </div>
   );
 };

@@ -1,96 +1,70 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { checkWord, getWords, isWordExist } from '../libs/utils';
-import playerType from '../libs/playerType';
-import { TGame, TPlayer, TPlayers, TPreferences } from '../libs/types';
+import { useCallback, useContext, useState } from 'react';
+import { addNewWord, checkWord, isWordExist, validResult, invalidResult } from '../libs/utils';
+import { IResult, TWordResult } from '../libs/types';
+import GameContext from '../context/GameContext';
 
 interface IWordController {
-  notValidMessage: string;
-  lastWord: string;
-  gameData: TGame | undefined;
-  addWord: (value: string) => void;
+  saveWord: (response: IResult) => void;
+  wordResponse: TWordResult | undefined;
 }
 
-type TWordController = {
-  preferences: TPreferences;
-  currentPlayer: TPlayer;
-  players: TPlayers;
-  game: TGame;
-};
+const useWordController = (): IWordController => {
+  const { state, dispatch } = useContext(GameContext);
 
-const useWordController = ({
-  players,
-  currentPlayer,
-  preferences,
-  game,
-}: TWordController): IWordController => {
-  const [gameData, setGameData] = useState<TGame>();
-  const [lastWord, setLastWord] = useState<string>('');
-  const [notValidMessage, setNotValidMessage] = useState<string>('');
-  const resolveRef = useRef<(value: string) => void>();
+  const [wordResponse, setWordResponse] = useState<TWordResult>();
 
-  const isWordValid = (newWord: string): boolean => {
-    const isValid = checkWord(lastWord, newWord, preferences.charLength, preferences.letterFromEnd);
-
-    const words = getWords(game);
-    const isExist = isWordExist(newWord, words);
-
-    if (isExist) {
-      const user = playerType(currentPlayer, players);
-      setNotValidMessage(`${user} said an existing word!.`);
-      return false;
+  const checkResponse = (response: IResult): TWordResult => {
+    console.log(response);
+    if (!state.currentWord) {
+      return validResult(response.response);
     }
 
+    if (!response.found) {
+      return invalidResult(response.response);
+    }
+
+    const { charLength, letterFromEnd } = state.preferences;
+
+    const isValid = checkWord(state.currentWord, response.response, charLength, letterFromEnd);
     if (!isValid) {
-      const user = playerType(currentPlayer, players);
-      setNotValidMessage(`${user} lost.`);
-      return false;
+      return invalidResult(`"${response.response}" is invalid, game over!`);
     }
-    return true;
-  };
 
-  const addWord = (word: string) => {
-    if (isWordValid(word)) {
-      resolveRef?.current?.(word);
+    const isExist = isWordExist(response.response, state.game);
+    if (isExist) {
+      return invalidResult(`"${response.response}" exists, game over!`);
     }
-  };
 
-  const getWord = useCallback(() => {
-    return new Promise((resolve: (word: string) => void) => {
-      resolveRef.current = resolve;
-    });
-  }, [game]);
+    return validResult();
+  };
 
   const saveWord = useCallback(
-    (newWord: string, player: TPlayer) => {
-      let data = game;
-
-      if (player) {
-        const words = [...game[player]];
-        words.push(newWord);
-
-        data = {
-          ...game,
-          [player]: words,
-        };
+    (response: IResult) => {
+      console.log('response', response);
+      if (state.timer.timeIsUp) {
+        setWordResponse(invalidResult('Your answer is invalid.'));
+        return; // Block game.
       }
 
-      setGameData(data);
+      const result = checkResponse(response);
+
+      if (result.invalid) {
+        setWordResponse(result);
+        return;
+      }
+
+      console.log(response.response, state.game, state.currentPlayer);
+      const data = addNewWord(response.response, state.game, state.currentPlayer);
+
+      console.log(data);
+      setWordResponse(validResult(response.response));
+      dispatch({ type: 'currentWord', payload: response.response });
+      dispatch({ type: 'game', payload: data });
     },
-    [game],
+    [state.currentWord, state.game, state.currentPlayer],
   );
 
-  useEffect(() => {
-    const fn = async () => {
-      const newWord = await getWord();
-      setLastWord(newWord);
-
-      saveWord(newWord, currentPlayer);
-    };
-
-    fn().then();
-  }, [currentPlayer]);
-
-  return { notValidMessage, lastWord, addWord, gameData };
+  return { saveWord, wordResponse };
 };
 
 export default useWordController;

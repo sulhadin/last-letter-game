@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import GameContext from '../../../context/GameContext';
-import { TPreferences } from '../../../libs/types';
+import { TGamePreferences } from '../../../libs/types';
 
 interface IGamePreferences {
   setStartGame: (value: boolean) => void;
@@ -9,7 +9,10 @@ interface IGamePreferences {
 const GamePreferences: React.FC<IGamePreferences> = ({ setStartGame }) => {
   const { state, dispatch } = useContext(GameContext);
 
-  const [formValues, setFormValues] = useState<TPreferences>(state.preferences);
+  const [formValues, setFormValues] = useState<TGamePreferences>({
+    ...state.preferences,
+    timer: state.timer,
+  });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = event;
@@ -33,20 +36,34 @@ const GamePreferences: React.FC<IGamePreferences> = ({ setStartGame }) => {
   const dispatchDefaults = () => {
     dispatch({
       type: 'game',
-      payload: { A923476983: [], B8486384963: [] },
+      payload: { A9HUMAN: [], B8COMPUTER: [] },
     });
 
     dispatch({
       type: 'players',
-      payload: { A923476983: 'HUMAN', B8486384963: 'COMPUTER' },
+      payload: { A9HUMAN: 'HUMAN', B8COMPUTER: 'COMPUTER' },
     });
 
     dispatch({
       type: 'currentUser',
-      payload: 'A923476983',
+      payload: 'A9HUMAN',
     });
 
-    dispatch({ type: 'preferences', payload: formValues });
+    const preferences = {
+      charLength: formValues.charLength,
+      letterFromEnd: formValues.letterFromEnd,
+      probabilityPercent: formValues.probabilityPercent,
+      restricted: formValues.restricted,
+      inputType: formValues.inputType,
+    };
+
+    const timer = {
+      second: formValues.timer.second,
+      timeIsUp: formValues.timer.timeIsUp,
+    };
+
+    dispatch({ type: 'preferences', payload: preferences });
+    dispatch({ type: 'timer', payload: timer });
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -92,6 +109,18 @@ const GamePreferences: React.FC<IGamePreferences> = ({ setStartGame }) => {
               onChange={handleChange}
               min={0}
               max={1}
+            />
+          </label>
+        </div>
+        <div className="form-item">
+          <label htmlFor="second">
+            Count down second
+            <input
+              type="number"
+              name="second"
+              value={formValues?.timer.second}
+              onChange={handleChange}
+              min={3}
             />
           </label>
         </div>

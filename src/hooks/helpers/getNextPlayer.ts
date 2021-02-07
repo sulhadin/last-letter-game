@@ -1,6 +1,6 @@
 import { TPlayer, TPlayers } from '../../libs/types';
 
-const nextPlayer = (currentPlayer: TPlayer, players: TPlayers): string => {
+const getNextPlayer = (currentPlayer: TPlayer, players: TPlayers): string => {
   const keys = Object.keys(players);
 
   if (!currentPlayer) {
@@ -17,4 +17,4 @@ const nextPlayer = (currentPlayer: TPlayer, players: TPlayers): string => {
   return keys[0];
 };
 
-export default nextPlayer;
+export default getNextPlayer;

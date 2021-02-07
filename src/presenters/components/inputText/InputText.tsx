@@ -7,7 +7,12 @@ const InputText: React.FC<IInput> = ({ onNewWord, placeholder, disabled }) => {
 
   const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>): void => {
     if (event.key === 'Enter') {
-      onNewWord(inputValue);
+      onNewWord({
+        played: true,
+        found: true,
+        response: inputValue,
+      });
+
       setValue('');
     }
   };
