@@ -1,6 +1,6 @@
 import { TGame, TPlayer, TWordResult } from '../utils/types';
 
-export const splicer = (word: string, length: number, fromEnd: boolean): string => {
+export const slicer = (word: string, length: number, fromEnd: boolean): string => {
   const startIndex = fromEnd ? word.length - 1 : 0;
   return word.substr(startIndex, length);
 };
@@ -15,7 +15,7 @@ export const checkWord = (
   charLength: number,
   lettersFromEnd: boolean,
 ): boolean => {
-  const letters = splicer(prevWord, charLength, lettersFromEnd);
+  const letters = slicer(prevWord, charLength, lettersFromEnd);
   return word.toUpperCase().startsWith(letters.toUpperCase());
 };
 
