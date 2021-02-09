@@ -1,8 +1,8 @@
-import { useState, useCallback, useContext } from 'react';
+import { useState, useCallback, useContext, useMemo } from 'react';
 
 import GameContext from '../context/GameContext';
 
-import { getRandomWord, aiController } from '../controllers/aiController';
+import { getRandomWord, seekWord } from '../controllers/aiController';
 import { getWords } from '../controllers/wordController';
 import delay from '../utils/delay';
 
@@ -13,24 +13,27 @@ import { TAIPlay } from './types';
 const useAIPlay = (type: string, word?: string): TAIPlay => {
   const { state } = useContext(GameContext);
 
-  const aiWordLogic = {
-    [AIPlayerType.COMPUTER]: {
-      seekWord(wordList: string[]): IResult | null {
-        if (word) {
-          return aiController(word, wordList, state.preferences);
-        }
-        return null;
+  const aiWordLogic = useMemo(
+    () => ({
+      [AIPlayerType.COMPUTER]: {
+        seekWord(wordList: string[]): IResult | null {
+          if (word) {
+            return seekWord(word, wordList, state.preferences);
+          }
+          return null;
+        },
       },
-    },
-    [AIPlayerType.AUTO_PLAYER]: {
-      seekWord(wordList: string[]): IResult | null {
-        if (!wordList.length) {
-          return getRandomWord();
-        }
-        return null;
+      [AIPlayerType.AUTO_PLAYER]: {
+        seekWord(wordList: string[]): IResult | null {
+          if (!wordList.length) {
+            return getRandomWord();
+          }
+          return null;
+        },
       },
-    },
-  };
+    }),
+    [state.preferences],
+  );
 
   const [response, setResponse] = useState<IPlayerResult>({
     played: false,

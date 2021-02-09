@@ -70,7 +70,7 @@ function probabilityLogic(probabilityPercent: number): IResult {
  * @param words
  * @param preferences
  */
-function aiController(word: string, words: string[], preferences: TPreferences): IResult {
+function seekWord(word: string, words: string[], preferences: TPreferences): IResult {
   const result = probabilityLogic(preferences.probabilityPercent);
 
   if (!result.found) {
@@ -86,4 +86,4 @@ function aiController(word: string, words: string[], preferences: TPreferences):
   return seekAndFind({ letters });
 }
 
-export { aiController, getRandomWord };
+export { seekWord, getRandomWord };
