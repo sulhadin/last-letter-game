@@ -2,51 +2,107 @@ import names from '../assets/data/names.json';
 import { IResult, IPayload, TPreferences } from '../utils/types';
 import randomize from '../utils/randomize';
 import { probability } from './playerController';
-import { splicer } from './wordController';
+import { slicer } from './wordController';
 
-const lostMessage = "Sorry, I've lost :(";
+const lostMessage = 'Sorry, did not find :(';
 
-function resultFormatter(word: string, found = true): IResult {
+/**
+ * Gets random name in names array.
+ *
+ * Generates a random index number between 0 and name.length, then gets the name based on the index.
+ *
+ * @return {IResult} Returns a found name in result.
+ * @see [Random generator]{@link randomize}
+ */
+function getRandomWord(): IResult {
+  const index = randomize(0, names.length - 1);
+
   return {
-    response: word,
-    found,
+    response: names[index],
+    found: true,
   };
 }
 
-function getRandomWord(): IResult {
-  const index = randomize(0, names.length - 1);
-  return resultFormatter(names[index]);
-}
-
+/**
+ * Seeks and finds a word that starts with the letters parameter in payload and also skips the ones in the 'words'.
+ *
+ * @param {IPayload} payload - Payload that contains letters and words.
+ * @return {IResult} Returns a successful or failed information in result.
+ * @example
+ *    const names = ['Sulhadin', 'Sümeyye', 'Kübra', 'Fatih']
+ *    const words = ['Sulhadin']
+ *
+ *    restrictedSeekAndFind({letters: 's', words: words})
+ *    // => {response: 'Sümeyye', found: true }
+ *
+ *    restrictedSeekAndFind({letters: 's', words: words})
+ *    // => {response: 'Sorry, did not find :(', found: false }
+ *    // Did not find since words array is now ['Sulhadin', 'Sümeyye']
+ *
+ */
 function restrictedSeekAndFind(payload: IPayload): IResult {
   const result = names.find(
     (word) => word.startsWith(payload.letters) && !payload.words?.includes(word),
   );
 
   if (!result) {
-    return resultFormatter(lostMessage, false);
+    return {
+      response: lostMessage,
+      found: false,
+    };
   }
 
-  return resultFormatter(result);
+  return {
+    response: result,
+    found: true,
+  };
 }
 
 /**
+ * Seeks and finds a word that starts with letters parameter in payload.
  *
- * @param payload
+ * @func seekAndFind
+ * @param {IPayload} payload - Payload that contains letters parameter.
+ * @return {IResult} Returns a successful or failed information in result.
+ * @example
+ *
+ *    seekAndFind({letters: 's'});
+ *    // {response: 'Sümeyye', found: true};
  */
 function seekAndFind(payload: IPayload): IResult {
   const result = names.find((word) => word.startsWith(payload.letters));
 
   if (!result) {
-    return resultFormatter(lostMessage, false);
+    return {
+      response: lostMessage,
+      found: false,
+    };
   }
 
-  return resultFormatter(result);
+  return {
+    response: result,
+    found: true,
+  };
 }
 
 /**
+ * Determines whether AI should find an answer or not up to given percentage. Returns failed result if AI should not
+ * find an answer.
  *
- * @param probabilityPercent
+ * @func probabilityLogic
+ * @param {number} probabilityPercent - Up to percentage that AI can find an answer.
+ * @return {IResult} Returns a successful or failed information in result.
+ * @see [Probability function]{@link probability}
+ * @example
+ *
+ *    probabilityLogic(1);
+ *    // {response: '', found: true };
+ *
+ *    probabilityLogic(0);
+ *    // {response: 'Sorry, did not find :(', found: false };
+ *
+ *    probabilityLogic(0.3);
+ *    // returns success or fail up to 30%
  */
 function probabilityLogic(probabilityPercent: number): IResult {
   const shouldFind = probability(probabilityPercent);
@@ -65,10 +121,51 @@ function probabilityLogic(probabilityPercent: number): IResult {
 }
 
 /**
+ * Core logics plays a grand role in AI decision of finding a new word. One of them is {@link probabilityLogic}.
+ * The reason is to make AI act like human in terms of finding a word to say.
+ * There is a percentage given as a parameter in preferences to be taken into account before finding a word.
+ * Computer fails up to given percentage and returns failed result.
  *
- * @param word
- * @param words
- * @param preferences
+ * If succeeds, slices a word and get letters from it considering parameters inside preferences and gets word which
+ * by passing letters, which is the other role in AI decision.
+ *
+ * Two types of seeking word are used in terms of restriction rule; {@link restrictedSeekAndFind}, {@link seekAndFind}
+ * one of them is been called considering restriction rule.
+ *
+ * @func seekWord
+ * @param {string} word - A Word that is needed to be taken into account when finding the next word.
+ * @param {string[]} words - A list of word that has been spoken before.
+ * @param {TPreferences} preferences - A set of parameters of game state.
+ * @return {IResult} - Returns a successful or failed information in result.
+ * @see [Slicer]{@link slicer}, [Probability]{@link probabilityLogic},
+ * @see [Restricted find]{@link restrictedSeekAndFind}, [Find]{@link seekAndFind}
+ * @example
+ *
+ *     const preferences = {probabilityPercent: 1, charLength: 1, letterFromEnd: true, restricted: true};
+ *     const words = ['Nalan', 'Kadir']
+ *
+ *     seekWord('Sulhadin', words, preferences);
+ *     // { response: 'Nihat', found: true }
+ *
+ *     seekWord('Tarık', words, preferences);
+ *     // { response: 'Kemal', found: true }
+ *
+ *     // After changing some items of preferences.
+ *     preferences.charLength = 2; // Get two letter from end
+ *
+ *     seekWord('AhmET', words, preferences);
+ *     // { response: 'ETem', found: true }
+ *
+ *     seekWord('EMbiya', words, preferences);
+ *     // { response: 'YAsin', found: true }
+ *
+ *    preferences.letterFromEnd = false; // Get first {charLength} letter
+ *
+ *    seekWord('Hakan', words, preferences);
+ *    // { response: 'Hakim', found: true }
+ *
+ *    seekWord('Halit', words, preferences);
+ *    // { response: 'Haydar', found: true }
  */
 function seekWord(word: string, words: string[], preferences: TPreferences): IResult {
   const result = probabilityLogic(preferences.probabilityPercent);
@@ -77,7 +174,7 @@ function seekWord(word: string, words: string[], preferences: TPreferences): IRe
     return result;
   }
 
-  const letters = splicer(word, preferences.charLength, preferences.letterFromEnd);
+  const letters = slicer(word, preferences.charLength, preferences.letterFromEnd);
 
   if (preferences.restricted) {
     return restrictedSeekAndFind({ letters, words });
