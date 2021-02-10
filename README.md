@@ -13,8 +13,8 @@ Yet, initially, a random text appears on the screen after it is uttered. After t
 you can type an answer or use speechToText library by speaking to computer.
 
 ## Note
-Instead of a complete OOP or FP approaches, I used an hybrid version of them.
-Players and Game are constructed as Objects.
+Instead of a complete OOP, I used fully function based solution and FP like approaches.
+Players are constructed as strings whereas Game are constructed as Objects.
 
 ## Structure
 The game structure is built with React hooks. `index.tsx` is the entrance file wrapped with 
