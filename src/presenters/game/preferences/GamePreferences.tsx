@@ -1,15 +1,11 @@
 import React, { useContext, useState } from 'react';
 import GameContext from '../../../context/GameContext';
-import { TGamePreferences } from '../../../utils/types';
-
-interface IGamePreferences {
-  setStartGame: (value: boolean) => void;
-}
+import { IGamePreferences, TGamePreferencesState } from '../../../utils/types';
 
 const GamePreferences: React.FC<IGamePreferences> = ({ setStartGame }) => {
   const { state, dispatch } = useContext(GameContext);
 
-  const [formValues, setFormValues] = useState<TGamePreferences>({
+  const [formValues, setFormValues] = useState<TGamePreferencesState>({
     ...state.preferences,
     timer: state.timer,
   });
@@ -33,6 +29,7 @@ const GamePreferences: React.FC<IGamePreferences> = ({ setStartGame }) => {
     });
   };
 
+  // Dispatch process is handled by settings defaults at first.
   const dispatchDefaults = () => {
     dispatch({
       type: 'game',

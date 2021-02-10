@@ -19,6 +19,10 @@ export interface IInput {
   disabled?: boolean;
 }
 
+export interface IGamePreferences {
+  setStartGame: (value: boolean) => void;
+}
+
 // types
 
 export type TPreferences = {
@@ -29,7 +33,7 @@ export type TPreferences = {
   inputType: 'TEXT' | 'VOICE';
 };
 
-export type TGamePreferences = TPreferences & {
+export type TGamePreferencesState = TPreferences & {
   timer: TTimer;
 };
 
