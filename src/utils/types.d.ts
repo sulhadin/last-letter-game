@@ -1,4 +1,5 @@
 // interfaces
+
 export interface IResult {
   response: string;
   found: boolean;
@@ -19,6 +20,7 @@ export interface IInput {
 }
 
 // types
+
 export type TPreferences = {
   charLength: number;
   letterFromEnd: boolean; // Also can get letters from beginning to make the game more interesting.
