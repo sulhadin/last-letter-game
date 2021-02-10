@@ -14,7 +14,7 @@ you can type an answer or use speechToText library by speaking to computer.
 
 ## Note
 Instead of a complete OOP or FP approaches, I used an hybrid version of them.
-Players and Game are constructed as Objects and they are basically instances of StoreNode class.
+Players and Game are constructed as Objects.
 
 ## Structure
 The game structure is built with React hooks. `index.tsx` is the entrance file wrapped with 
