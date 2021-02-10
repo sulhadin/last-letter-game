@@ -4,9 +4,10 @@ export function getSpeechSynthesisUtterance(text: string): SpeechSynthesisUttera
   return new SpeechSynthesisUtterance(text);
 }
 /**
- * Uses webkit speech recognition.
+ * Uses {@link window.speechSynthesis} and  {@link SpeechSynthesisUtterance} to utter a given word.
  *
- * @param lang Language definition
+ * @param {string} lang - Language definition
+ * @return {function} - Returns function that asks for a text to utter.
  */
 function textToSpeech(lang: string): (text: string) => void {
   return (text: string) => {
