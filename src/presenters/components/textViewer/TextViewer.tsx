@@ -1,31 +1,17 @@
 import React, { memo } from 'react';
+
+import { ITextViewer } from './types';
 import './style.scss';
 
-interface IWordViewer {
-  word: string | undefined;
-  prefix?: string;
-  className?: string;
-  size?: string;
-}
-
-const TextViewer: React.FC<IWordViewer> = ({ prefix, word, className, size }) => {
-  if (!word) {
+const TextViewer: React.FC<ITextViewer> = ({ prefix, text, type = 'info', size = 'medium' }) => {
+  if (!text) {
     return <></>;
-  }
-
-  if (size === 'small') {
-    return (
-      <>
-        <h4>{prefix}</h4>
-        <h2 className={className}>{word.toUpperCase()}</h2>
-      </>
-    );
   }
 
   return (
     <>
-      <h3>{prefix}</h3>
-      <h1 className={className}>{word.toUpperCase()}</h1>
+      <p className={`word-viewer-prefix ${type}  ${size}`}>{prefix}</p>
+      <p className={`word-viewer-word-viewer-title ${type}  ${size}`}>{text.toUpperCase()}</p>
     </>
   );
 };

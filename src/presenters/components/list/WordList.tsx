@@ -1,13 +1,9 @@
 import React, { memo } from 'react';
+
+import { IList } from './types';
 import './style.scss';
 
-interface IList {
-  data: string[] | [];
-  empty: string;
-  title: string;
-}
-
-const List: React.FC<IList> = ({ data, title, empty }) => {
+const WordList: React.FC<IList> = ({ data, title, empty }) => {
   if (!data.length) {
     return <p>{empty}</p>;
   }
@@ -26,4 +22,4 @@ const List: React.FC<IList> = ({ data, title, empty }) => {
   );
 };
 
-export default memo(List);
+export default memo(WordList);

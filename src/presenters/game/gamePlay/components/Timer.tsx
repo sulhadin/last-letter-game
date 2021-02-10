@@ -1,19 +1,19 @@
 import React, { memo, useContext, useEffect } from 'react';
-import WordViewer from '../../../components/textViewer/TextViewer';
-import useCountDown from '../../../../hooks/useCountDown';
+
 import { GameContext } from '../../../../context';
 
-type TTimer = {
-  onTimeUp: (value: string) => void;
-  isGameOver: boolean;
-};
-const Timer: React.FC<TTimer> = ({ onTimeUp, isGameOver }) => {
-  const { state } = useContext(GameContext);
-  const [timer, timeIsUp, restart, setIsActive] = useCountDown(10);
+import TextViewer from '../../../components/textViewer/TextViewer';
+import useCountDown from '../../../../hooks/useCountDown';
+import { TTimer } from './types';
+
+const Timer: React.FC<TTimer> = ({ onTimeIsUp }) => {
+  const { state, dispatch } = useContext(GameContext);
+  const [second, timeIsUp, restart, setActive] = useCountDown(state.timer.second);
 
   useEffect(() => {
     if (timeIsUp) {
-      onTimeUp('Time is up!');
+      onTimeIsUp();
+      dispatch({ type: 'timer', payload: { second, timeIsUp } });
     }
   }, [timeIsUp]);
 
@@ -22,12 +22,10 @@ const Timer: React.FC<TTimer> = ({ onTimeUp, isGameOver }) => {
   }, [state.currentPlayer]);
 
   useEffect(() => {
-    if (isGameOver) {
-      setIsActive(false);
-    }
-  }, [isGameOver]);
+    setActive(state.timer.active);
+  }, [state.timer.active]);
 
-  return <WordViewer word={timer.toString()} />;
+  return <TextViewer text={second.toString()} size="large" />;
 };
 
 export default memo(Timer);

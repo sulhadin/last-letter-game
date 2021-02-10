@@ -1,4 +1,17 @@
-.title{
-  font-size: var(--title-size);
-  color: var(--title-color);
+.word-viewer-prefix {
+   &.large{
+      font-size:24px;
+    }
+    &.medium{
+      font-size:18px;
+    }
+    &.small{
+      font-size:14px;
+    }
+    &.danger{
+      color: var(--danger);
+    }
+    &.info{
+      color: var(--info);
+    }
 }

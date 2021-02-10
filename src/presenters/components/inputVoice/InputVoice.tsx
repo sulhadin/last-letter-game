@@ -1,15 +1,12 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
-import SpeechToText from '../../../controllers/speechToText';
-import { IInput } from '../../../libs/types';
+
+import useSpeechListener from '../../../hooks/useSpeechListener';
+import SpeechToText from '../../../utils/speechToText';
+import { MicEnum } from '../../../utils/enums';
+import { IInput } from '../../../utils/types';
+
 import mute from '../../../assets/mute.png';
 import unmute from '../../../assets/unmute.png';
-import useSpeechListener from '../../../hooks/useSpeechListener';
-
-// eslint-disable-next-line no-shadow
-enum MicEnum {
-  Mute,
-  Unmute,
-}
 
 const microphone = {
   [MicEnum.Mute]: mute,
@@ -18,7 +15,7 @@ const microphone = {
 
 const InputVoice: React.FC<IInput> = ({ onNewWord, placeholder, disabled }) => {
   const [muteState, setMuteState] = useState<MicEnum>(MicEnum.Unmute);
-  const [speech, speechStopped] = useSpeechListener(true);
+  const [speech, speechStopped, resetSpeech] = useSpeechListener(true);
 
   const speechToText = useMemo(() => SpeechToText('tr'), []);
 
@@ -34,7 +31,12 @@ const InputVoice: React.FC<IInput> = ({ onNewWord, placeholder, disabled }) => {
 
   useEffect(() => {
     if (speechStopped && speech) {
-      onNewWord(speech);
+      onNewWord({
+        played: true,
+        found: true,
+        response: speech,
+      });
+      resetSpeech();
     }
     if (speechStopped) {
       setMuteState(MicEnum.Mute);
@@ -51,8 +53,15 @@ const InputVoice: React.FC<IInput> = ({ onNewWord, placeholder, disabled }) => {
 
   return (
     <div className="input-voice">
-      <img src={microphone[muteState]} key={muteState} width={100} alt="mute" onClick={toggleMic} />
-      <div>{placeholder}</div>
+      <img
+        className="input-voice-toggle"
+        src={microphone[muteState]}
+        key={muteState}
+        width={100}
+        alt="mute"
+        onClick={toggleMic}
+      />
+      <div className="input-voice-placeholder">{placeholder}</div>
     </div>
   );
 };

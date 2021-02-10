@@ -2,72 +2,51 @@ import { useContext, useEffect, useMemo, useState } from 'react';
 
 import GameContext from '../context/GameContext';
 
-import useComputerPlay from './useComputerPlay';
-import playerType from '../libs/playerType';
-import useAutoPlay from './useAutoPlay';
-import textToSpeech from '../controllers/textToSpeech';
-import useGameController from './useGameController';
-import { TGame, TPlayers } from '../libs/types';
-
-type TGamePlay = {
-  gameOver: string | undefined;
-  setGameOver: (value: string) => void;
-  addWord: (value: string) => void;
-  lastWord: string;
-  gameData: TGame;
-  currentPlayerType: string | null;
-  players: TPlayers;
-};
+import { getPlayerType } from '../controllers/playerController';
+import useWord from './useWord';
+import usePlayer from './usePlayer';
+import { TGamePlay } from './types';
 
 const useGamePlay = (): TGamePlay => {
-  const { state } = useContext(GameContext);
+  const { state, dispatch } = useContext(GameContext);
 
-  const [gameOver, setGameOver] = useState<string>();
+  const [lostMessage, setLostMessage] = useState<string>('');
 
-  const { notValidMessage, lastWord, addWord, newPlayer } = useGameController();
-  const { word: autoPlayerWord } = useAutoPlay(newPlayer);
-  const { computerLost, word: computerWord } = useComputerPlay({
-    lastWord,
-    player: newPlayer,
-    preferences: state.preferences,
-    players: state.players,
-    game: state.game,
-  });
+  const { saveWord, wordResponse } = useWord();
+  const { player, addWord, lastAction } = usePlayer();
 
+  // Step #1 Play as soon as 'currentPlayer' changes.
   useEffect(() => {
-    if (autoPlayerWord) {
-      addWord(autoPlayerWord);
+    player.play();
+  }, [state.currentPlayer]);
+
+  // Step #2, Listen last action from usePlayer, save response if currentPlayer played.
+  useEffect(() => {
+    if (lastAction?.played) {
+      saveWord(lastAction);
     }
-  }, [autoPlayerWord]);
+  }, [lastAction]);
 
-  //  Read the response coming from computer.
+  // Step #3 Listen word saving response and switch player if response is valid.
   useEffect(() => {
-    if (computerWord) {
-      addWord(computerWord);
-
-      const speak = textToSpeech(computerWord);
-      speak();
+    if (wordResponse?.valid) {
+      player.nextPlayer();
     }
-  }, [computerWord]);
 
-  useEffect(() => {
-    setGameOver(computerLost);
-  }, [computerLost]);
+    if (wordResponse?.invalid) {
+      setLostMessage(wordResponse.result);
+      dispatch({ type: 'timer', payload: { active: false } });
+    }
+  }, [wordResponse]);
 
-  useEffect(() => {
-    setGameOver(notValidMessage);
-  }, [notValidMessage]);
-
-  const currentPlayerType = useMemo(() => playerType(state.currentPlayer, state.players), [state]);
+  const currentPlayerType = useMemo(() => getPlayerType(state.currentPlayer, state.players), [
+    state,
+  ]);
 
   return {
-    gameOver,
-    setGameOver,
+    lostMessage,
     addWord,
-    lastWord,
     currentPlayerType,
-    gameData: state.game,
-    players: state.players,
   };
 };
 

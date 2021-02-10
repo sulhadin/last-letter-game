@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
-import { TGame, TPlayers } from '../../../libs/types';
-import List from '../../components/list/List';
+import { TGame, TPlayers } from '../../../utils/types';
+import WordList from '../../components/list/WordList';
 import './style.scss';
-import playerType from '../../../libs/playerType';
+import { getPlayerType } from '../../../controllers/playerController';
 
 interface IList {
   gameData: TGame;
@@ -11,12 +11,12 @@ interface IList {
 
 const Lists: React.FC<IList> = ({ gameData, players }) => (
   <div className="lists">
-    {Object.entries(gameData).map(([key, value]) => (
-      <List
-        key={key}
-        data={value}
+    {Object.entries(gameData).map(([player, words]) => (
+      <WordList
+        key={player}
+        data={words}
         empty="Word list is empty"
-        title={`${playerType(key, players)} word list`}
+        title={`${getPlayerType(player, players)} word list`}
       />
     ))}
   </div>

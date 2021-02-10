@@ -1,10 +1,12 @@
 import { TInitialState, TPlayerActions } from './types';
 
 const initialState: TInitialState = {
+  timer: { timeIsUp: false, second: 100, active: true },
   game: {},
   players: {},
   currentPlayer: undefined,
   currentUser: undefined,
+  currentWord: undefined,
   preferences: {
     charLength: 1,
     letterFromEnd: true,
@@ -40,6 +42,16 @@ const gameReducer = (state = initialState, action: TPlayerActions): TInitialStat
       return {
         ...state,
         preferences: action.payload,
+      };
+    case 'timer':
+      return {
+        ...state,
+        timer: action.payload,
+      };
+    case 'currentWord':
+      return {
+        ...state,
+        currentWord: action.payload,
       };
     default:
       return state;

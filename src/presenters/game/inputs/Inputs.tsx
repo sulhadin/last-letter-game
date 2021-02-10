@@ -1,30 +1,14 @@
-import React, { memo, useContext, useEffect, useMemo } from 'react';
-import InputText from '../../components/inputText/InputText';
-import InputVoice from '../../components/inputVoice/InputVoice';
+import React, { memo, useContext } from 'react';
+
 import GameContext from '../../../context/GameContext';
-import { IInput } from '../../../libs/types';
+import InputComponent from './components/InputComponent';
+import { IInput } from '../../../utils/types';
 
-const Inputs: React.FC<IInput> = ({ onNewWord, placeholder }) => {
+const Inputs: React.FC<IInput> = ({ onNewWord, placeholder, disabled }) => {
   const { state } = useContext(GameContext);
-  const [disabled, setDisabled] = React.useState<boolean>(false);
+  const Input = InputComponent[state.preferences.inputType];
 
-  useEffect(() => {
-    setDisabled(state.currentPlayer !== state.currentUser);
-  }, [state.currentPlayer]);
-
-  const InputComponent = useMemo(
-    () => ({
-      TEXT: () => {
-        return <InputText onNewWord={onNewWord} placeholder={placeholder} disabled={disabled} />;
-      },
-      VOICE: () => {
-        return <InputVoice onNewWord={onNewWord} placeholder={placeholder} disabled={disabled} />;
-      },
-    }),
-    [onNewWord, placeholder, disabled],
-  );
-
-  return InputComponent[state.preferences.inputType]();
+  return <Input onNewWord={onNewWord} placeholder={placeholder} disabled={disabled} />;
 };
 
 export default memo(Inputs);

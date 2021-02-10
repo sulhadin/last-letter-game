@@ -3,33 +3,33 @@ import { useState, useEffect } from 'react';
 export type CountDown = [number, boolean, () => void, (value: boolean) => void];
 
 const useCountDown = (seconds: number): CountDown => {
-  const [isActive, setIsActive] = useState(true);
-  const [isTimeout, setIsTimeout] = useState(false);
-  const [counter, setCounter] = useState(seconds);
+  const [active, setActive] = useState(true);
+  const [timeIsUp, setTimeIsUp] = useState(false);
+  const [second, setSecond] = useState(seconds);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
 
-    if (isActive) {
+    if (active) {
       intervalId = setInterval(() => {
-        if (counter <= 1) {
-          setIsActive(false);
-          setIsTimeout(true);
+        if (second <= 1) {
+          setActive(false);
+          setTimeIsUp(true);
         }
-        setCounter((count) => count - 1);
+        setSecond((count) => count - 1);
       }, 1000);
     }
 
     return () => clearInterval(intervalId);
-  }, [isActive, counter]);
+  }, [active, second]);
 
   const restart = () => {
-    setIsTimeout(false);
-    setIsActive(true);
-    setCounter(seconds);
+    setTimeIsUp(false);
+    setActive(true);
+    setSecond(seconds);
   };
 
-  return [counter, isTimeout, restart, setIsActive];
+  return [second, timeIsUp, restart, setActive];
 };
 
 export default useCountDown;
