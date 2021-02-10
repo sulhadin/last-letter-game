@@ -1,8 +1,16 @@
 import { useState, useEffect } from 'react';
 
-export type CountDown = [number, boolean, () => void, (value: boolean) => void];
+export type TCountDown = [number, boolean, () => void, (value: boolean) => void];
 
-const useCountDown = (seconds: number): CountDown => {
+/**
+ * A React hook that set up a count down timer.
+ *
+ * @func useCountDown
+ * @memberOf React
+ * @param {number} seconds - A number that count down will start from.
+ * @return {TCountDown} - Returns remaining time and a timer handlers.
+ */
+const useCountDown = (seconds: number): TCountDown => {
   const [active, setActive] = useState(true);
   const [timeIsUp, setTimeIsUp] = useState(false);
   const [second, setSecond] = useState(seconds);

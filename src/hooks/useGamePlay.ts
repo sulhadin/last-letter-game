@@ -5,8 +5,17 @@ import GameContext from '../context/GameContext';
 import { getPlayerType } from '../controllers/playerController';
 import useWord from './useWord';
 import usePlayer from './usePlayer';
-import { TGamePlay } from './types';
+import { TGamePlay } from '../utils/types';
 
+/**
+ * A React hook that communicate {@link useWord} and {@link usePlayer} hooks with each other.
+ * Also evaluates the responses coming from them.
+ *
+ * @function useGamePlay
+ * @memberOf React
+ * @return {TGamePlay} - Returns {@link lostMessage} that contains game over message, {@link addWord} that waits for a response from players
+ * and {@link currentPlayerType} that contains type of current player.
+ */
 const useGamePlay = (): TGamePlay => {
   const { state, dispatch } = useContext(GameContext);
 
@@ -15,19 +24,36 @@ const useGamePlay = (): TGamePlay => {
   const { saveWord, wordResponse } = useWord();
   const { player, addWord, lastAction } = usePlayer();
 
-  // Step #1 Play as soon as 'currentPlayer' changes.
+  /**
+   * Step #1
+   * Triggers 'play' function of 'usePlayer' for a new game as soon as 'currentPlayer' changes.
+   * After triggers, a new word is expected from players.
+   *
+   * @inner
+   */
   useEffect(() => {
     player.play();
   }, [state.currentPlayer]);
 
-  // Step #2, Listen last action from usePlayer, save response if currentPlayer played.
+  /**
+   * Step #2
+   * Listens the 'lastAction' of 'usePlayer' and saves the last action which contains new spoken word if players played.
+   *
+   * @inner
+   */
   useEffect(() => {
     if (lastAction?.played) {
       saveWord(lastAction);
     }
   }, [lastAction]);
 
-  // Step #3 Listen word saving response and switch player if response is valid.
+  /**
+   * Step #3
+   * Listens word saving response and switch player if response is valid.
+   * Deactivates timer if the response is invalid.
+   *
+   * @inner
+   */
   useEffect(() => {
     if (wordResponse?.valid) {
       player.nextPlayer();

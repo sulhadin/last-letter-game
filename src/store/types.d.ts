@@ -16,7 +16,7 @@ export type TInitialState = {
   game: TGame;
   players: TPlayers;
   currentPlayer: TPlayer;
-  currentWord: string | undefined;
+  currentWord: string;
   currentUser: TPlayer;
   preferences: TPreferences;
   timer: TTimer;

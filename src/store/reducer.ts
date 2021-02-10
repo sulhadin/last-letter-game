@@ -6,7 +6,7 @@ const initialState: TInitialState = {
   players: {},
   currentPlayer: undefined,
   currentUser: undefined,
-  currentWord: undefined,
+  currentWord: '',
   preferences: {
     charLength: 1,
     letterFromEnd: true,

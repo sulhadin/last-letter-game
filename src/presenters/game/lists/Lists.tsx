@@ -1,13 +1,8 @@
 import React, { memo } from 'react';
-import { TGame, TPlayers } from '../../../utils/types';
+import { IList } from '../../../utils/types';
 import WordList from '../../components/list/WordList';
-import './style.scss';
 import { getPlayerType } from '../../../controllers/playerController';
-
-interface IList {
-  gameData: TGame;
-  players: TPlayers;
-}
+import './style.scss';
 
 const Lists: React.FC<IList> = ({ gameData, players }) => (
   <div className="lists">

@@ -23,6 +23,15 @@ export interface IGamePreferences {
   setStartGame: (value: boolean) => void;
 }
 
+export type IWordGetter = {
+  [key: string]: { seekWord(): IResult; waitForWord(getWord: () => void): void };
+};
+
+export interface IList {
+  gameData: TGame;
+  players: TPlayers;
+}
+
 // types
 
 export type TPreferences = {
@@ -57,4 +66,40 @@ export type TWordResult = {
   result: string;
   valid?: boolean;
   invalid?: boolean;
+};
+
+export type TWordGetter = {
+  word: string;
+  words: string[];
+  preferences: TPreferences;
+};
+
+export type TAIPlayers = {
+  response: IPlayerResult;
+  play: () => void;
+};
+
+export type TAIPlay = {
+  response: IPlayerResult;
+  play: () => void;
+};
+
+export type TUseWord = {
+  saveWord: (response: IResult) => void;
+  wordResponse: TWordResult | undefined;
+};
+
+export type TUsePlayer = {
+  player: {
+    play: () => void;
+    nextPlayer: () => void;
+  };
+  addWord: (value: IPlayerResult) => void;
+  lastAction: IPlayerResult | undefined;
+};
+
+export type TGamePlay = {
+  lostMessage: string;
+  addWord: (value: IPlayerResult) => void;
+  currentPlayerType: string | null;
 };
