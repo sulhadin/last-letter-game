@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import useAIPlay from './useAIPlay';
 import textToSpeech from '../utils/textToSpeech';
-import { TAIPlayers } from './types';
+import { TAIPlayers } from '../utils/types';
 
 /**
  * Gets response from ai and utters it and returns the response along with play function.

@@ -5,8 +5,7 @@ import GameContext from '../context/GameContext';
 import { wordGetter } from '../controllers/aiController';
 import { getWords } from '../controllers/wordController';
 
-import { IPlayerResult } from '../utils/types';
-import { TAIPlay } from './types';
+import { IPlayerResult, TAIPlay } from '../utils/types';
 
 /**
  * A React hook that initialize functions according to player type, that gets word.

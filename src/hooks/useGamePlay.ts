@@ -5,15 +5,16 @@ import GameContext from '../context/GameContext';
 import { getPlayerType } from '../controllers/playerController';
 import useWord from './useWord';
 import usePlayer from './usePlayer';
-import { TGamePlay } from './types';
+import { TGamePlay } from '../utils/types';
 
 /**
  * A React hook that communicate {@link useWord} and {@link usePlayer} hooks with each other.
  * Also evaluates the responses coming from them.
  *
- * @func useGamePlay
+ * @function useGamePlay
  * @memberOf React
- * @return {TGamePlay}
+ * @return {TGamePlay} - Returns {@link lostMessage} that contains game over message, {@link addWord} that waits for a response from players
+ * and {@link currentPlayerType} that contains type of current player.
  */
 const useGamePlay = (): TGamePlay => {
   const { state, dispatch } = useContext(GameContext);

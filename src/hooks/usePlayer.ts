@@ -3,8 +3,7 @@ import { useCallback, useContext, useRef, useState } from 'react';
 import GameContext from '../context/GameContext';
 
 import { getNextPlayer } from '../controllers/playerController';
-import { IPlayerResult } from '../utils/types';
-import { TUsePlayer } from './types';
+import { IPlayerResult, TUsePlayer } from '../utils/types';
 
 /**
  * A React hook that gets result {@link IPlayerResult} from players and record it as a last action of player.
@@ -13,7 +12,8 @@ import { TUsePlayer } from './types';
  *
  * @func usePlayer
  * @memberOf React
- * @return {TUsePlayer} - Returns player actions.
+ * @return {TUsePlayer} - Returns {@link player} for play again and switch the current user,
+ * a callback{@link addWord} that waits an input from players, {@link lastAction} that contains last action of a player.
  */
 const usePlayer = (): TUsePlayer => {
   const { state, dispatch } = useContext(GameContext);

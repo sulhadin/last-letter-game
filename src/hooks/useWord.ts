@@ -10,15 +10,14 @@ import {
   invalidResult,
 } from '../controllers/wordController';
 
-import { IResult, TWordResult } from '../utils/types';
-import { TUseWord } from './types';
+import { IResult, TWordResult, TUseWord } from '../utils/types';
 
 /**
  * A React hook that validates the spoken word and saves it and delivers a result {@link TWordResult} in return.
  *
  * @func useWord
  * @memberOf React
- * @return {TUseWord}
+ * @return {TUseWord} - Returns {@link saveWord} that saves the response, {@link wordResponse} that contains word response.
  */
 const useWord = (): TUseWord => {
   const { state, dispatch } = useContext(GameContext);
