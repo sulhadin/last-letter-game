@@ -34,7 +34,6 @@ const useGamePlay = (): TGamePlay => {
     player.play();
   }, [state.currentPlayer]);
 
-  // Step #2, Listen last action from 'usePlayer', save response if currentPlayer played.
   /**
    * Step #2
    * Listens the 'lastAction' of 'usePlayer' and saves the last action which contains new spoken word if players played.
