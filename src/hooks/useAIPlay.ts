@@ -32,7 +32,7 @@ const useAIPlay = (type: string, word?: string): TAIPlay => {
         },
       },
     }),
-    [state.preferences],
+    [state.preferences, word],
   );
 
   const [response, setResponse] = useState<IPlayerResult>({
