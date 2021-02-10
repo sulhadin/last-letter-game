@@ -23,6 +23,10 @@ export interface IGamePreferences {
   setStartGame: (value: boolean) => void;
 }
 
+export type IWordGetter = {
+  [key: string]: { seekWord(): IResult; waitForWord(getWord: () => void): void };
+};
+
 // types
 
 export type TPreferences = {
@@ -57,4 +61,10 @@ export type TWordResult = {
   result: string;
   valid?: boolean;
   invalid?: boolean;
+};
+
+export type TWordGetter = {
+  word: string;
+  words: string[];
+  preferences: TPreferences;
 };
