@@ -1,39 +1,23 @@
-import { useState, useCallback, useContext, useMemo } from 'react';
+import { useState, useContext, useMemo } from 'react';
 
 import GameContext from '../context/GameContext';
 
-import { getRandomWord, seekWord } from '../controllers/aiController';
+import { wordGetter } from '../controllers/aiController';
 import { getWords } from '../controllers/wordController';
-import delay from '../utils/delay';
 
-import { AIPlayerType } from '../utils/enums';
-import { IPlayerResult, IResult } from '../utils/types';
+import { IPlayerResult } from '../utils/types';
 import { TAIPlay } from './types';
 
-const useAIPlay = (type: string, word?: string): TAIPlay => {
+/**
+ * A React hook that initialize functions according to player type, that gets word.
+ *
+ *
+ * @param {string} type - Player type which can be COMPUTER | AUTO_PLAYER | ...
+ * @param {string} word - Last spoken word.
+ * @return {TAIPlay} - Returns response of player and 'play' callback to be triggered when it is AI turn again.
+ */
+const useAIPlay = (type: string, word: string): TAIPlay => {
   const { state } = useContext(GameContext);
-
-  const aiWordLogic = useMemo(
-    () => ({
-      [AIPlayerType.COMPUTER]: {
-        seekWord(wordList: string[]): IResult | null {
-          if (word) {
-            return seekWord(word, wordList, state.preferences);
-          }
-          return null;
-        },
-      },
-      [AIPlayerType.AUTO_PLAYER]: {
-        seekWord(wordList: string[]): IResult | null {
-          if (!wordList.length) {
-            return getRandomWord();
-          }
-          return null;
-        },
-      },
-    }),
-    [state.preferences, word],
-  );
 
   const [response, setResponse] = useState<IPlayerResult>({
     played: false,
@@ -41,23 +25,20 @@ const useAIPlay = (type: string, word?: string): TAIPlay => {
     found: false,
   });
 
-  const getWord = useCallback(
-    (wordList: string[]) => {
-      const search = aiWordLogic[type];
-      if (search) {
-        const answer = search.seekWord(wordList);
+  const words = useMemo(() => getWords(state.game), [state.game]);
 
-        if (answer) {
-          setResponse({ ...answer, played: true });
-        }
-      }
-    },
-    [state.currentPlayer],
-  );
+  const wordGetterParams = { word, words, preferences: state.preferences };
+
+  const aiWordGetter = useMemo(() => wordGetter(wordGetterParams), [wordGetterParams]);
+  const search = useMemo(() => aiWordGetter[type], [type]);
+
+  const getWord = () => {
+    const answer = search.seekWord();
+    setResponse({ ...answer, played: true });
+  };
 
   const play = () => {
-    const words = getWords(state.game);
-    delay(() => getWord(words), [1000, 3000]);
+    search.waitForWord(() => getWord());
   };
 
   return { response, play };
