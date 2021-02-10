@@ -53,6 +53,15 @@ export function getSpeechRecognition(lang: string): SpeechRecognition {
   return recognition;
 }
 
+/**
+ * Gets a default language and initializes {@link SpeechRecognition}.
+ *
+ * @func SpeechToText
+ * @param {string} lang - Language default
+ * @constructor
+ * @return {ISpeechToTextResult} - Returns start and stop methods of {@link SpeechRecognition};
+ * @see [Speech recognition]{@link SpeechRecognition} {@link webkitSpeechRecognition}
+ */
 export default function SpeechToText(lang: string): ISpeechToTextResult {
   // I haven't used grammar implementation here since I did not need it.
   // Can be implemented in the future.
