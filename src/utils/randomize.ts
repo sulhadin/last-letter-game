@@ -1,6 +1,7 @@
 /**
  * Always returns a random number between min (included) and max (included)
  *
+ * @func randomize
  * @param {number} start - A number that determines the beginning point
  * @param {number} end - A number that determines the end point
  * @return {number} - Returns a random number between start-end range.
