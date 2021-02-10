@@ -1,8 +1,10 @@
 import names from '../assets/data/names.json';
-import { IResult, IPayload, TPreferences } from '../utils/types';
+import { IResult, IPayload, TPreferences, TWordGetter, IWordGetter } from '../utils/types';
 import randomize from '../utils/randomize';
 import { probability } from './playerController';
 import { slicer } from './wordController';
+import { AIPlayerType } from '../utils/enums';
+import delay from '../utils/delay';
 
 const lostMessage = 'Sorry, did not find :(';
 
@@ -137,7 +139,7 @@ function probabilityLogic(probabilityPercent: number): IResult {
  * @param {string[]} words - A list of word that has been spoken before.
  * @param {TPreferences} preferences - A set of parameters of game state.
  * @return {IResult} - Returns a successful or failed information in result.
- * @see [Slicer]{@link slicer}, [Probability]{@link probabilityLogic},
+ * @see [Slicer]{@link slicer}, [Probability]{@link probabilityLogic}
  * @see [Restricted find]{@link restrictedSeekAndFind}, [Find]{@link seekAndFind}
  * @example
  *
@@ -183,4 +185,43 @@ function seekWord(word: string, words: string[], preferences: TPreferences): IRe
   return seekAndFind({ letters });
 }
 
-export { seekWord, getRandomWord };
+/**
+ * Takes a {@link TWordGetter} and returns {@link IWordGetter} which is an object based on player type.
+ * Functions in the object are player specific, so more than one player can be specified.
+ *
+ * @func wordGetter
+ * @param {TWordGetter} params
+ * @return {IWordGetter} - Returns a player type based object that contains player based business logic.
+ * @see [Find word]{@link seekWord}, [Random word]{@link getRandomWord}, [Delay]{@link delay}
+ * @example
+ *
+ *    const params = { word: 'Andre', words: ["Ahmet", "Begüm"], preferences }
+ *
+ *    const aiPlayer = wordGetter(params);
+ *
+ *    const computer = aiPlayer['COMPUTER']
+ *    const autoPlayer = aiPlayer['AUTO_PLAYER']
+ *
+ *    // => run computer|autoPlayer.seekWord(); will return {@link IResult} according to 'params'
+ *    // => run computer|autoPlayer.waitForWord(callback); will return void that runs callback.
+ */
+const wordGetter = (params: TWordGetter): IWordGetter => ({
+  [AIPlayerType.COMPUTER]: {
+    seekWord(): IResult {
+      return seekWord(params.word, params.words, params.preferences);
+    },
+    waitForWord(getWord: () => void): void {
+      delay(getWord, [1000, 3000]);
+    },
+  },
+  [AIPlayerType.AUTO_PLAYER]: {
+    seekWord(): IResult {
+      return getRandomWord();
+    },
+    waitForWord(getWord: () => void): void {
+      delay(getWord, 100);
+    },
+  },
+});
+
+export { seekWord, getRandomWord, wordGetter };
