@@ -61,7 +61,7 @@ The game is build upon 3 main custom hooks; [useGamePlay](./src/hooks/useGamePla
 and also three Players types that provide inputs; 'COMPUTER', 'AUTO_PLAY, 'HUMAN'. Let's examine
  the diagram which is prepared to explain the flow used in the game;
 
-![Last letter diagram](./src/assets/last-letter.jpg?raw=true "Last letter diagram")
+![Last letter diagram](./src/assets/last-letter-diagram.jpg?raw=true "Last letter diagram")
 
 Game logics flow over [useGamePlay](./src/hooks/useGamePlay.ts) and distributed to callbacks of [usePlayer](./src/hooks/usePlayer.ts) and
 [useWord](./src/hooks/useWord.ts).
