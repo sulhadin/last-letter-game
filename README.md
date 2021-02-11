@@ -70,7 +70,7 @@ Game logics flow over [useGamePlay](./src/hooks/useGamePlay.ts) and distributed 
 changes considering player type.
 
 ## TODO
- - Change the global structure of the game
+ - Change the global state structure of the game
  - Tests
  - Multiplayer
 
