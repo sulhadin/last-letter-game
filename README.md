@@ -22,7 +22,7 @@ The game structure is built with React hooks. [index](./src/index.tsx) is the en
 is used as a global state manager. Global state and reducer dispatcher are passed down the children via React Context and  
 reached with context hook.
 
-Preferences are kept in global state as game settings and is depended on these preferences to determine some business logics.
+Preferences are kept in global state as game settings. So the game is depended on these preferences to determine some game logics.
 
 Since the game is built with React hooks, Therefore; strongly got benefits from some fascinating react hooks.
 That are `useEffect`,  `useCallback`, `useMemo`
@@ -40,7 +40,7 @@ Game logics flow over [useGamePlay](./src/hooks/useGamePlay.ts) and distributed 
 changes considering player type.
 
 ## TODO
- - Change `game` global state structure
+ - Change the global structure of the game
  - Tests
 
 ## Why useReducer ?
