@@ -24,6 +24,7 @@ Preferences determine the game rules which are change able and, which brings the
  }
 ```
 Let's explain these preferences;
+
 `charLength` Normal game is dependent on 1 letter which you can get and start, but not here!
 ### Example
 Let's set `charLength` to `1`<br>
