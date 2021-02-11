@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 
-import { ITextViewer } from './types';
 import './style.scss';
+import { ITextViewer } from '../../../utils/types';
 
 const TextViewer: React.FC<ITextViewer> = ({ prefix, text, type = 'info', size = 'medium' }) => {
   if (!text) {
