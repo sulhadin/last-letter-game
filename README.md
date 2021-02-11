@@ -26,14 +26,14 @@ Preferences determine the game rules which are change able and, which brings the
 Let's explain these preferences;
 
 `charLength` Normal game is dependent on 1 letter which you can get and start, but not here!
-### Example
+#### Example
 Let's set `charLength` to `1`<br>
 Ahmet -> the last letter is `T` and the next word should start with it. (e.g. Tahir)<br>
 Let's set `charLength` to `3`<br>
 Ahmet -> the last 3 letters are `MET` and the next word should start with them. (e.g. Metin)
 
-`letterFromEnd` Also can get letters from beginning to make the game more interesting.<br>
-### Example
+`letterFromEnd` Also can get letters from beginning to make the game more interesting.
+#### Example
 Let's set `letterFromEnd` to `false`<br>
 Ahmet -> the first letter is `A` and the next word should start with it. (e.g. Aylin)<br>
 Let's set `charLength` to `2`<br>
