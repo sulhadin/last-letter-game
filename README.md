@@ -36,7 +36,7 @@ and also three Players types that provide inputs; 'COMPUTER', 'AUTO_PLAY, 'HUMAN
 Game logics flow over [useGamePlay](./src/hooks/useGamePlay.ts) and distributed to callbacks of [usePlayer](./src/hooks/usePlayer.ts) and
 [useWord](./src/hooks/useWord.ts).
 
-`Players`'s inputs are in `InputWord` and the business logic of players 
+`Players`'s inputs are in [InputWord](./src/presenters/game/inputs/InputWord.tsx) and the business logic of players 
 changes considering player type.
 
 ## TODO
