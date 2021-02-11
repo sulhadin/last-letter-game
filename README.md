@@ -26,20 +26,20 @@ Preferences determine the game rules which are change able and, which brings the
 Let's explain these preferences;
 `charLength` Normal game is dependent on 1 letter which you can get and start, but not here!
 ### Example
-Let's set `charLength` to `1`
-Ahmet -> the last letter is `T` and the next word should start with it. (e.g. Tahir)
-Let's set `charLength` to `3`
+Let's set `charLength` to `1`<br>
+Ahmet -> the last letter is `T` and the next word should start with it. (e.g. Tahir)<br>
+Let's set `charLength` to `3`<br>
 Ahmet -> the last 3 letters are `MET` and the next word should start with them. (e.g. Metin)
 
-`letterFromEnd` Also can get letters from beginning to make the game more interesting.
+`letterFromEnd` Also can get letters from beginning to make the game more interesting.<br>
 ### Example
-Let's set `letterFromEnd` to `false`
-Ahmet -> the first letter is `A` and the next word should start with it. (e.g. Aylin)
-Let's set `charLength` to `2`
+Let's set `letterFromEnd` to `false`<br>
+Ahmet -> the first letter is `A` and the next word should start with it. (e.g. Aylin)<br>
+Let's set `charLength` to `2`<br>
 Ahmet -> the first 2 letters are `Ah` and the next word should start with them. (e.g. Ahsen)
 
-`probabilityPercent` Up to percentage that the computer will give you an answer.
-`restricted` This is a mode that the next word should not be said before.
+`probabilityPercent` Up to percentage that the computer will give you an answer.<br>
+`restricted` This is a mode that the next word should not be said before.<br>
 
 ## Note
 Instead of a complete OOP, I used fully function based solution and FP approach.
