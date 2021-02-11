@@ -5,7 +5,7 @@ import GameContext from '../../../context/GameContext';
 import useGamePlay from '../../../hooks/useGamePlay';
 import TextViewer from '../../components/textViewer/TextViewer';
 import InputWord from '../inputs/InputWord';
-import Timer from './components/Timer';
+import Timer from '../../components/timer/Timer';
 import Lists from '../lists/Lists';
 import './style.scss';
 

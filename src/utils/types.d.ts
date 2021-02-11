@@ -32,6 +32,10 @@ export interface IList {
   players: TPlayers;
 }
 
+export type ITimer = {
+  onTimeIsUp: () => void;
+};
+
 // types
 
 export type TPreferences = {
