@@ -17,10 +17,10 @@ Preferences determine the game rules which are change able and, which brings the
 
 ```js
  {
- charLength: number;
- letterFromEnd: boolean;
- probabilityPercent: number;
- restricted: boolean;
+   charLength: number;
+   letterFromEnd: boolean;
+   probabilityPercent: number;
+   restricted: boolean;
  }
 ```
 Let's explain these preferences;
