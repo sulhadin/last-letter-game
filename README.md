@@ -17,7 +17,7 @@ Instead of a complete OOP, I used fully function based solution and FP like appr
 Players are constructed as strings whereas Game are constructed as Objects.
 
 ## Structure
-The game structure is built with React hooks. `index.tsx` is the entrance file wrapped with 
+The game structure is built with React hooks. [index](./src/index.tsx) is the entrance file wrapped with 
 [GameProvider](./src/context/GameProvider.tsx) which provides the state management through React Context. `useReducer` 
 is used as a global state manager. Global state and reducer dispatcher are passed down the children via React Context and  
 reached with context hook.
@@ -27,13 +27,14 @@ Preferences are kept in global state as game settings and is depended on these p
 Since the game is built with React hooks, Therefore; strongly got benefits from some fascinating react hooks.
 That are `useEffect`,  `useCallback`, `useMemo`
 
-The game is build upon 3 main custom hooks; `useGamePlay`, `usePlayer`, `useWord` 
-and also three Players types that provide inputs; 'COMPUTER', 'AUTO_PLAY, 'HUMAN'. To examine
-t diagram which is prepared to explain the business logic used here in the game;
+The game is build upon 3 main custom hooks; [useGamePlay](./src/hooks/useGamePlay.ts), [usePlayer](./src/hooks/usePlayer.ts), [useWord](./src/hooks/useWord.ts)
+and also three Players types that provide inputs; 'COMPUTER', 'AUTO_PLAY, 'HUMAN'. Let's examine
+ the diagram which is prepared to explain the flow used in the game;
 
 ![Last letter diagram](./src/assets/last-letter.jpg?raw=true "Last letter diagram")
 
-All business logic flows over `useGamePlay` and distributed to callbacks of  `usePlayer` and `useWord`.
+Game logics flow over [useGamePlay](./src/hooks/useGamePlay.ts) and distributed to callbacks of [usePlayer](./src/hooks/usePlayer.ts) and
+[useWord](./src/hooks/useWord.ts).
 
 `Players`'s inputs are in `InputWord` and the business logic of players 
 changes considering player type.
