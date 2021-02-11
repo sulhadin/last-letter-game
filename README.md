@@ -72,6 +72,7 @@ changes considering player type.
 ## TODO
  - Change the global structure of the game
  - Tests
+ - Multiplayer
 
 ## Why useReducer ?
 Since this is a small project, a normal global state can be stored using `useState` in [GameProvider](./src/context/GameProvider.tsx)
