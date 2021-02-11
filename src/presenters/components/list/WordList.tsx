@@ -1,9 +1,9 @@
 import React, { memo } from 'react';
 
-import { IList } from './types';
 import './style.scss';
+import { IWordList } from '../../../utils/types';
 
-const WordList: React.FC<IList> = ({ data, title, empty }) => {
+const WordList: React.FC<IWordList> = ({ data, title, empty }) => {
   if (!data.length) {
     return <p>{empty}</p>;
   }

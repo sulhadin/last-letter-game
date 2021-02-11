@@ -32,6 +32,12 @@ export interface IList {
   players: TPlayers;
 }
 
+export interface IWordList {
+  data: string[] | [];
+  empty: string;
+  title: string;
+}
+
 export type ITimer = {
   onTimeIsUp: () => void;
 };
