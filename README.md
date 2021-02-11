@@ -44,5 +44,7 @@ changes considering player type.
  - Tests
 
 ## Why useReducer ?
-A better state management can be used here, but since a couple of state we have, 
-we can stick with redux or etc.
+Since this is a small project, a normal global state can be stored using `useState` in [GameProvider](./src/context/GameProvider.tsx)
+however, I decided to store game preferences as well, so a small global management state is needed here.
+In other words, a better state management can be used here, but since we just have a couple of states, 
+we can stick with `useReducer` etc.
