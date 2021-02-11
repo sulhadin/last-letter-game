@@ -7,13 +7,42 @@ Yet, there is a bit of change here. Will be explained later.
 
 ## How to Play
 Preferences screen appears at the beginning of the game. You can configure your game
-and determine which one of `voice` and `text` you are to chose to proceed.
-After saving preferences you can begin saying words as you are done with your configurations. 
-Yet, initially, a random text appears on the screen after it is uttered. After that,
-you can type an answer or use speechToText library by speaking to computer.
+and select one of `voice` and `text` you are to chose to play by.
+
+Initially, a random selected name appears on the screen then it is uttered. After that,
+you can type an answer or use your microphone  to say your response to computer.
+
+## Game Rules
+Preferences determine the game rules which are change able and, which brings the game easy or hard mode.
+
+```js
+ {
+ charLength: number;
+ letterFromEnd: boolean;
+ probabilityPercent: number;
+ restricted: boolean;
+ }
+```
+Let's explain these preferences;
+`charLength` Normal game is dependent on 1 letter which you can get and start, but not here!
+### Example
+Let's set `charLength` to `1`
+Ahmet -> the last letter is `T` and the next word should start with it. (e.g. Tahir)
+Let's set `charLength` to `3`
+Ahmet -> the last 3 letters are `MET` and the next word should start with them. (e.g. Metin)
+
+`letterFromEnd` Also can get letters from beginning to make the game more interesting.
+### Example
+Let's set `letterFromEnd` to `false`
+Ahmet -> the first letter is `A` and the next word should start with it. (e.g. Aylin)
+Let's set `charLength` to `2`
+Ahmet -> the first 2 letters are `Ah` and the next word should start with them. (e.g. Ahsen)
+
+`probabilityPercent` Up to percentage that the computer will give you an answer.
+`restricted` This is a mode that the next word should not be said before.
 
 ## Note
-Instead of a complete OOP, I used fully function based solution and FP like approaches.
+Instead of a complete OOP, I used fully function based solution and FP approach.
 Players are constructed as strings whereas Game are constructed as Objects.
 
 ## Structure
